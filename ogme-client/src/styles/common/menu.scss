@@ -1,0 +1,58 @@
+.menu-section {
+  .container {
+    .menu-container {
+      position: fixed;
+      bottom: 1.5rem;
+      z-index: 3;
+      padding-inline: inherit;
+      right: 0;
+      left: 0;
+      .menu-btn {
+        padding-block: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        background-color: $black;
+        color: white;
+        font-size: 1.2rem;
+        width: 100%;
+        left: 0;
+        right: 0;
+      }
+      .menu-overlay {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        bottom: 3.2rem;
+        padding-block: 4rem;
+        gap: 2rem;
+        background-color: $black;
+        border-bottom: 1px solid white;
+        color: white;
+        .title {
+          padding-block: 1.5rem;
+          position: relative;
+          display: flex;
+          align-items: center;
+          svg {
+            position: absolute;
+            left: -2rem;
+            font-size: 1.2rem;
+          }
+        }
+        a {
+          @include ff-link;
+          color: white;
+          position: relative;
+          display: flex;
+          align-items: flex-end;
+          svg {
+            position: absolute;
+            right: -2rem;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+.onboard-welcome {
+  .logo {
+    height: 7rem;
+    img {
+      animation: intro 1s ease;
+      transform-origin: center center
+    }
+  }
+}
+
+@keyframes intro {
+  0% {
+    transform: scale(0.7);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

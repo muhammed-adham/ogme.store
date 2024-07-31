@@ -1,0 +1,11 @@
+.policy{
+    .container{
+        padding-block: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+    strong{
+        font-weight: 900;
+    }
+}

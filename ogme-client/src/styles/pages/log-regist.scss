@@ -1,0 +1,148 @@
+.log-regist-page {
+  // height: 100vh;
+  // display: flex;
+  .container {
+    padding-block: 2.5rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    .title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      h2 {
+        font-size: 2.488rem;
+      }
+      p {
+        font-size: 0.9rem;
+
+        a {
+          @include ff-link;
+          font-size: 0.9rem;
+          opacity: 0.5;
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .form-container {
+      background-color: white;
+      padding: 2rem 0rem;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      gap: 2rem;
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 45%;
+        input {
+          padding: 1rem 1rem 1rem 0.25rem;
+          width: 100%;
+          background-color: transparent;
+          border: none;
+          border-radius: 0;
+          border-bottom: 1px solid black;
+          &::placeholder {
+            text-transform: capitalize;
+          }
+          &:focus {
+            outline: none;
+          }
+        }
+        input[type="submit"] {
+          @include btn-pr-default;
+          width: 100%;
+          font-size: 14px;
+          margin-top: 1.5rem;
+        }
+        .form-pass {
+          position: relative;
+          .eye-icon {
+            opacity: 0.5;
+            cursor: pointer;
+            position: absolute;
+            top: 40%;
+            right: 0;
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+        .forget-password {
+          align-self: flex-end;
+          font-size: 0.9rem;
+          opacity: 0.5;
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+      p {
+        position: relative;
+        display: flex;
+        align-items: center;
+        &::before {
+          content: "";
+          position: absolute;
+          background-color: black;
+          height: 45%;
+          width: 1px;
+          left: 50%;
+          top: 55%;
+          opacity: 0.3;
+          transform: translateX(50%);
+        }
+        &::after {
+          content: "";
+          position: absolute;
+          background-color: black;
+          height: 45%;
+          width: 1px;
+          left: 50%;
+          top: 0%;
+          opacity: 0.3;
+          transform: translateX(50%);
+        }
+      }
+      .outh {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 45%;
+        gap: 1rem;
+      }
+    }
+    .you-agree {
+      font-size: 0.8rem;
+      display: flex;
+      gap: 1rem;
+      a {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+//========================================================================================Feature Classes
+.required {
+  // border-bottom: 1px solid $danger !important;
+  &::placeholder {
+    color: $danger;
+  }
+}
+
+//========================================================================================Input Hover Background Handler
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}

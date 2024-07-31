@@ -1,0 +1,35 @@
+.ask-us{
+    .container{
+        padding-block: 2.5rem;
+        .form-container{
+            display: flex;
+            justify-content: space-between;
+            .title{
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .form-group{
+                width: 40vw;
+                form{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                    input, textarea{
+                        height: 4rem;
+                        padding: 2rem;
+                    }
+                    textarea{
+                        height: 16rem;
+                        resize: none
+                    }
+
+                    .submit{
+                        @include btn-pr-default;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
