@@ -1,10 +1,11 @@
 import { GoogleLogin } from "@react-oauth/google";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postNewUser } from "../../utils/axiosConfig";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useMutation } from "react-query";
+import RegisterLoader from "../common/RegisterLoader";
 
 /** === Register Page ===
  *
@@ -29,6 +30,11 @@ const Register = () => {
       },
     }
   );
+
+  useEffect(() => {
+    if (isLoading) {
+    }
+  }, [isLoading]);
   //========================================================================================ShowPassword
   const [showPass, setShowPass] = useState();
   //========================================================================================Variables
@@ -42,7 +48,7 @@ const Register = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    //========================================================================================userVariables 
+    //========================================================================================userVariables
     const fullName = document.getElementById("fullName");
     const userEmail = document.getElementById("email");
     const userMobile = document.getElementById("mobile");
@@ -68,6 +74,9 @@ const Register = () => {
     else if (userPassword.value == 0) {
       toast.error("please enter a password");
       userPassword.classList.add("required");
+    } else if (userPassword.value.length <= 5) {
+      toast.error("Your password is too short!");
+      userPassword.classList.add("required");
     }
     //========================================================================================Confirm Password
     else if (userConfirmPassword.value == 0) {
@@ -81,7 +90,7 @@ const Register = () => {
       fullName.value !== 0 &&
       userEmail.value !== 0 &&
       userMobile.value !== 0 &&
-      userPassword.value !== 0&&
+      userPassword.value !== 0 &&
       userConfirmPassword.value !== 0
     ) {
       createUser(userData);
@@ -119,101 +128,108 @@ const Register = () => {
   //=============================================================Return=================================================================//
   return (
     <>
-      <section className="log-regist-page">
-        <div className="container">
-          <div className="title">
-            <h2>sign up</h2>
-            <p>
-              Already Have an account?
-              <Link to={"/login"}> log in</Link>
-            </p>
-          </div>
-          <div className="form-container">
-            <form action="" onSubmit={submitHandler}>
-              <div className="form-group">
-                <input
-                  onInput={onInputHandler}
-                  value={inputData.name}
-                  onKeyDown={enterKeyHandler}
-                  // required
-                  autoComplete="name"
-                  onChange={onChangeHandler}
-                  name="fullName"
-                  id="fullName"
-                  type="text"
-                  placeholder="full name"
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  onInput={onInputHandler}
-                  value={inputData.name}
-                  onKeyDown={enterKeyHandler}
-                  // required
-                  autoComplete="email"
-                  onChange={onChangeHandler}
-                  name="email"
-                  id="email"
-                  type="email"
-                  placeholder="email adress"
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  onInput={onInputHandler}
-                  value={inputData.name}
-                  onKeyDown={enterKeyHandler}
-                  // required
-                  autoComplete="tel"
-                  onChange={onChangeHandler}
-                  name="mobile"
-                  id="mobile"
-                  type="tel"
-                  placeholder="mobile number"
-                />
-              </div>
-              <div className="form-group form-pass">
-                <input
-                  onInput={onInputHandler}
-                  value={inputData.name}
-                  onKeyDown={enterKeyHandler}
-                  // required
-                  autoComplete="off"
-                  onChange={onChangeHandler}
-                  name="password"
-                  id="password"
-                  type={showPass ? "text" : "password"}
-                  placeholder="password"
-                />
-                <div
-                  className="eye-icon"
-                  onClick={() => {
-                    setShowPass((prev) => !prev);
-                  }}
-                >
-                  {showPass ? <FaEye /> : <FaEyeSlash />}
+      {isLoading ? (
+        <RegisterLoader />
+      ) : (
+        <section className="log-regist-page">
+          <div className="container">
+            <div className="title">
+              <h2>sign up</h2>
+              <p>
+                Already Have an account?
+                <Link to={"/login"}> log in</Link>
+              </p>
+            </div>
+            <div className="form-container">
+              <form action="" onSubmit={submitHandler}>
+                <div className="form-group">
+                  <input
+                    onInput={onInputHandler}
+                    value={inputData.name}
+                    onKeyDown={enterKeyHandler}
+                    // required
+                    autoComplete="name"
+                    onChange={onChangeHandler}
+                    name="fullName"
+                    id="fullName"
+                    type="text"
+                    placeholder="full name"
+                  />
                 </div>
-              </div>
-              <div className="form-group form-confirm-pass">
+                <div className="form-group">
+                  <input
+                    onInput={onInputHandler}
+                    value={inputData.name}
+                    onKeyDown={enterKeyHandler}
+                    // required
+                    autoComplete="email"
+                    onChange={onChangeHandler}
+                    name="email"
+                    id="email"
+                    type="email"
+                    placeholder="email adress"
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    onInput={onInputHandler}
+                    value={inputData.name}
+                    onKeyDown={enterKeyHandler}
+                    // required
+                    autoComplete="tel"
+                    onChange={onChangeHandler}
+                    name="mobile"
+                    id="mobile"
+                    type="tel"
+                    placeholder="mobile number"
+                  />
+                </div>
+                <div className="form-group form-pass">
+                  <input
+                    onInput={onInputHandler}
+                    value={inputData.name}
+                    onKeyDown={enterKeyHandler}
+                    // required
+                    autoComplete="off"
+                    onChange={onChangeHandler}
+                    name="password"
+                    id="password"
+                    type={showPass ? "text" : "password"}
+                    placeholder="password"
+                  />
+                  <div
+                    className="eye-icon"
+                    onClick={() => {
+                      setShowPass((prev) => !prev);
+                    }}
+                  >
+                    {showPass ? <FaEye /> : <FaEyeSlash />}
+                  </div>
+                </div>
+                <div className="form-group form-confirm-pass">
+                  <input
+                    onInput={onInputHandler}
+                    value={inputData.name}
+                    onKeyDown={enterKeyHandler}
+                    // required
+                    autoComplete="off"
+                    onChange={onChangeHandler}
+                    name="confirm-password"
+                    id="confirm-password"
+                    type={showPass ? "text" : "password"}
+                    placeholder="confirm password"
+                  />
+                </div>
                 <input
-                  onInput={onInputHandler}
-                  value={inputData.name}
-                  onKeyDown={enterKeyHandler}
-                  // required
-                  autoComplete="off"
-                  onChange={onChangeHandler}
-                  name="confirm-password"
-                  id="confirm-password"
-                  type={showPass ? "text" : "password"}
-                  placeholder="confirm password"
+                  onClick={(e) => {
+                    isLoading ? e.preventDefault() : null;
+                  }}
+                  className={isLoading ? "btn-disabled" : null}
+                  type="submit"
+                  value={`${isLoading ? "loading.." : "sign up"}`}
                 />
-              </div>
-              <input
-                type="submit"
-                value={`${isLoading ? "loading.." : "sign up"}`}
-              />
-            </form>
-            {/* <p>or</p>
+              </form>
+              {/* <p>or</p>
             <div className="outh">
               <GoogleLogin
                 width={368}
@@ -228,21 +244,22 @@ const Register = () => {
                 }}
               />
             </div> */}
+            </div>
+            <div className="you-agree">
+              <p>
+                By signing up, you agree to our{" "}
+                <Link to={"/terms"} onClick={() => scroll(0, 0)}>
+                  Terms of Use
+                </Link>{" "}
+                and acknowledge you've read our{" "}
+                <Link to={"/policy"} onClick={() => scroll(0, 0)}>
+                  Privacy Policy
+                </Link>
+              </p>
+            </div>
           </div>
-          <div className="you-agree">
-            <p>
-              By signing up, you agree to our{" "}
-              <Link to={"/terms"} onClick={() => scroll(0, 0)}>
-                Terms of Use
-              </Link>{" "}
-              and acknowledge you’ve read our{" "}
-              <Link to={"/policy"} onClick={() => scroll(0, 0)}>
-                Privacy Policy
-              </Link>
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 };

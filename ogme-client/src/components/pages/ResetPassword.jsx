@@ -55,6 +55,10 @@ const ResetPassword = () => {
       toast.error("please enter a password");
       userPassword.classList.add("required");
     }
+    else if(userPassword.value.length <= 5){
+      toast.error("Your password is too short!");
+      userPassword.classList.add("required");
+    }
     //========================================================================================Confirm Password
     else if (userConfirmPassword.value == 0) {
       toast.error("please confirm password");

@@ -35,7 +35,6 @@ const SingleProduct = () => {
     setDialog((prev) => (prev = e));
   };
 
-
   const mayAlsoCount = isMobile == true ? 2 : 3;
   //========================================================================================useState
   const [coverIdx, setCoverIdx] = useState(0);
@@ -122,7 +121,7 @@ const SingleProduct = () => {
         "_sale.price": _sale.price,
         quantity: quantity,
         featureImage: featureImage,
-        category
+        category,
       };
       setCartDataState(data);
     }
@@ -355,6 +354,7 @@ const SingleProduct = () => {
                     />
                   ) : (
                     <Card
+                      prdID={_id}
                       key={idx}
                       productImage={featureImage}
                       productName={name}
@@ -368,7 +368,7 @@ const SingleProduct = () => {
           </div>
         </div>
       </section>
-      {dialog ? <DialogAddress  onDialog={Close}/> : null}
+      {dialog ? <DialogAddress onDialog={Close} /> : null}
     </>
   );
 };

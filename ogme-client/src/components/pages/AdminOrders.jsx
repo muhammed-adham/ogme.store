@@ -136,7 +136,7 @@ const AdminOrders = () => {
                 <th>#</th>
                 <th>client info</th>
                 <th>product name</th>
-                <th>quantity</th>
+                <th>price</th>
                 <th>amount</th>
                 <th>date</th>
                 <th>status</th>

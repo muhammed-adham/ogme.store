@@ -2,7 +2,7 @@
   .logo {
     height: 7rem;
     img {
-      animation: intro 1s ease;
+      animation: intro 1s ease-in-out infinite alternate;
       transform-origin: center center
     }
   }
@@ -10,7 +10,7 @@
 
 @keyframes intro {
   0% {
-    transform: scale(0.7);
+    transform: scale(0.9);
   }
   100% {
     transform: scale(1);

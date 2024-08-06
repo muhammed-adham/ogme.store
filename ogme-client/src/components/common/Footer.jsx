@@ -47,16 +47,26 @@ const Footer = () => {
   };
 
   const submitMail = () => {
-    if(/^[a-zA-z0-9]{3,}@(gmail|yahoo|hotmail|outlook|icloud)\.com$/.test(inputData.email)){
-      askUsEmail(inputData).then(() => {
-        toast.success("mail sent successfully");
-        document.getElementById("email-sign").value = "";
-        scroll({top:0,behavior:"smooth"})
-      });
-    }else{
-      toast.error("email is incorrect!")
-    }
+    if (
+      /^[a-zA-z0-9]{3,}@(gmail|yahoo|hotmail|outlook|icloud)\.com$/.test(
+        inputData.email
+      )
+    ) {
+      toast.promise(
+        askUsEmail(inputData).then(() => {
+          toast.success("mail sent successfully");
+          document.getElementById("email-sign").value = "";
+          scroll({ top: 0, behavior: "smooth" });
+        }),
+        {
+          loading: "sending...",
+          success: <b>mail sent successfully</b>,
+          error: <b>email is incorrect!</b>,
+        }
+      );
+      
 
+    } 
   };
   //==================================================================Return======================================================//
   return (

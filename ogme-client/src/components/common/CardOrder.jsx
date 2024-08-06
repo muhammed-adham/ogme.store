@@ -65,7 +65,7 @@ const CardOrder = ({
       <div className="card-order-container">
         <div className="order-details">
           <div className="order-number info">
-            <b>Ordered On</b> <p>{orderNumber}</p>
+            <b>Order no.</b> <p>{orderNumber}</p>
           </div>
           <div className="expected-arrival info">
             <b style={{ textTransform: "capitalize" }}>Ogme {product}</b>{" "}
@@ -125,7 +125,7 @@ const CardOrder = ({
           </div>
           <div className="out-for-delivery check status-group">
             <TbTruckDelivery />
-            <p>Out dor Delivery</p>
+            <p>Out for Delivery</p>
           </div>
           <div className="order-arrived check status-group">
             <TbHomeHeart />

@@ -40,8 +40,7 @@ const AdminProducts = () => {
     price: 0,
     onSale: false,
     salePrice: 0,
-    productImage_2: "",
-    productImage_3: "",
+    productImages: [{ productImage_$: "" }],
   });
 
   //================================================================Handlers
@@ -169,8 +168,12 @@ const AdminProducts = () => {
         price: target.price,
         onSale: target._sale.onSale,
         salePrice: target._sale.price,
-        productImage_2: data[1]?.fullPath || "",
-        productImage_3: data[2]?.fullPath || "",
+
+        productImages: [
+          ...data.map((item, index) => ({
+            [`productImage_${index + 2}`]: item?.fullPath || "",
+          })),
+        ],
       });
     });
   };
@@ -387,7 +390,19 @@ const AdminProducts = () => {
 
             <div className="form-group">
               <label htmlFor="product-images">product images</label>
-              <input
+              {inputState?.productImages?.map((el, idx) => {
+                return (
+                  <input
+                    onInput={inputHandler}
+                    value={el[`productImage_${idx + 2}`] || ""}
+                    type="url"
+                    id={`productImage_${idx + 2}`}
+                    name={`productImage_${idx + 2}`}
+                    placeholder="URL"
+                  />
+                );
+              })}
+              {/* <input
                 onInput={inputHandler}
                 value={inputState.productImage_2}
                 type="url"
@@ -402,7 +417,7 @@ const AdminProducts = () => {
                 id="productImage_3"
                 name="productImage_3"
                 placeholder="Car View"
-              />
+              /> */}
               {isUpdating ? (
                 <>
                   <span className="warning-info">
@@ -438,7 +453,7 @@ const AdminProducts = () => {
               id="category-search"
               onInput={categorySearchHandler}
             >
-              <option value="" disabled >
+              <option value="" disabled>
                 Search by Category...
               </option>
               <option value="">All</option>
@@ -455,7 +470,7 @@ const AdminProducts = () => {
               id="onSale-search"
               onInput={onSaleHandler}
             >
-              <option value="" disabled >
+              <option value="" disabled>
                 Find On Sale...
               </option>
               <option value="">All</option>

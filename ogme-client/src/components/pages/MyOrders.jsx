@@ -55,7 +55,7 @@ const MyOrders = () => {
             <CardOrder
               orderState={state}
               key={idx}
-              orderNumber={new Date(date).toDateString()}
+              orderNumber={_id}
               orderPrice={price * quantity}
               product={name}
               quantity={quantity}

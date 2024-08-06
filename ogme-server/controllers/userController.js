@@ -360,58 +360,65 @@ module.exports.sendPasswordResetToken = async (req, res) => {
   let user = await _all(User, { email }),
     r = {};
   try {
-    if (user.response.count > 0) {
-      user = user.response.data[0];
-
-      const protocol = req.protocol,
-        host = req.hostname,
-        port = process.env.NODE_ENV === "dev" ? `:${process.env.PORT}` : "",
-        id = user._id;
-
-      const secret = process.env.JWTSECRET + id,
-        payload = {
-          email,
-          id,
-        };
-      const token = jwt.sign(payload, secret, {
-        expiresIn: process.env.JWTRESETEXP,
-      });
-
-      // const resetLink = `${protocol}://${host}${port}/user/reset-password/${id}/${token}`;
-      const resetLink = `${process.env.URL}reset-password/${id}/${token}`;
-
-      const emailData = {
-        sender: "Ogme Store",
-        senderEmail: process.env.MAILEMAIL,
-        receiver: user.fullName,
-        receiverEmail: user.email,
-        subject: "Password Reset",
-        message: `Following is your request link to reset password, please note that your request link expires after only ${process.env.JWTEMAILEXPMESSAGE}!`,
-        link: resetLink,
-        template: "./views/resetPasswordEmail.ejs",
+    if (user.response.count === 0) {
+      // If the user is not found
+      r = {
+        status: 404,
+        message: "User not found",
       };
-
-      axios.defaults.baseURL = axiosURL(req.protocol, req.hostname);
-      await axios
-        .post(`mail/custom`, emailData, {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        })
-        .then((response) => {
-          r = {
-            status: 200,
-            message: "Password reset Email sent.",
-          };
-        })
-        .catch((e) => {
-          r = {
-            status: 500,
-            message: e.message,
-          };
-        });
-      return res.send(r);
+      return res.status(404).send(r);
     }
+
+    user = user.response.data[0];
+
+    const protocol = req.protocol,
+      host = req.hostname,
+      port = process.env.NODE_ENV === "dev" ? `:${process.env.PORT}` : "",
+      id = user._id;
+
+    const secret = process.env.JWTSECRET + id,
+      payload = {
+        email,
+        id,
+      };
+    const token = jwt.sign(payload, secret, {
+      expiresIn: process.env.JWTRESETEXP,
+    });
+
+    // const resetLink = `${protocol}://${host}${port}/user/reset-password/${id}/${token}`;
+    const resetLink = `${process.env.URL}reset-password/${id}/${token}`;
+
+    const emailData = {
+      sender: "Ogme Store",
+      senderEmail: process.env.MAILEMAIL,
+      receiver: user.fullName,
+      receiverEmail: user.email,
+      subject: "Password Reset",
+      message: `Following is your request link to reset password, please note that your request link expires after only ${process.env.JWTEMAILEXPMESSAGE}!`,
+      link: resetLink,
+      template: "./views/resetPasswordEmail.ejs",
+    };
+
+    axios.defaults.baseURL = axiosURL(req.protocol, req.hostname);
+    await axios
+      .post(`mail/custom`, emailData, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      })
+      .then((response) => {
+        r = {
+          status: 200,
+          message: "Password reset Email sent.",
+        };
+      })
+      .catch((e) => {
+        r = {
+          status: 500,
+          message: e.message,
+        };
+      });
+    return res.send(r);
   } catch (e) {
     return {
       status: 500,

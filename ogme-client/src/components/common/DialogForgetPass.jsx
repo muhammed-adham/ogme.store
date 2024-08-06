@@ -23,12 +23,20 @@ const DialogForgetPass = ({ onDialog }) => {
     (email) => resetPassword(email),
     {
       onSuccess: (res) => {
-        toast.success("Password reset email sent");
-        navigate("/activate");
-        addressDialogHandler();
-      },
-      onError: (err) => {
-        toast.error("Something went wrong!");
+        console.log(res);
+
+        if (res?.response?.data?.status === 404) {
+          toast.error("Email address not found!");
+          return;
+        }
+        if (res?.status === 200) {
+          toast.success("Password reset email sent");
+          navigate("/activate");
+          addressDialogHandler();
+        }
+        onError: (err) => {
+          toast.error("Something went wrong!");
+        };
       },
     }
   );
@@ -48,6 +56,10 @@ const DialogForgetPass = ({ onDialog }) => {
 
   //Reset Button
   const resetBtnHandler = () => {
+    if (!emailAddress) {
+      toast.error("Email address required?");
+      return;
+    }
     fetchResetPassword(emailAddress);
   };
 
@@ -67,7 +79,12 @@ const DialogForgetPass = ({ onDialog }) => {
             onChange={inputHandler}
           />
           <div className="options">
-            <div className="confirm btn-dialog" onClick={resetBtnHandler}>
+            <div
+              className={`confirm btn-dialog ${
+                isLoading ? "btn-reset-disabled" : null
+              }`}
+              onClick={resetBtnHandler}
+            >
               {isLoading ? "Loading.." : "Reset"}
             </div>
             <div className="cancel btn-dialog" onClick={() => onDialog(false)}>

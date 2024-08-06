@@ -139,6 +139,13 @@
   }
 }
 
+.btn-disabled{
+  background-color: #e4e4e4 !important;
+  border: none!important;
+  cursor: none!important;
+  box-shadow: none!important;
+}
+
 //========================================================================================Input Hover Background Handler
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

@@ -38,10 +38,12 @@ module.exports.add = async (req, res) => {
         if (req.body.user === req.user._id) {
             const body = req.body;
             // Check if the product is already in the cart
-            const existingCartItem = await Cart.findOne({
+            const existingCartItem = await Order.findOne({
                 user: req.body.user,
                 product_id: req.body.product_id
             });
+            console.log(existingCartItem);
+            
 
             if (existingCartItem) {
                 // If the product is already in the cart, update the quantity

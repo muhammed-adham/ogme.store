@@ -18,7 +18,7 @@ const Card = ({
   oldPrice,
   productImage,
   onClick,
-  isDragging,
+  isDragging=false,
   mouseDown,
   prdID,
 }) => {

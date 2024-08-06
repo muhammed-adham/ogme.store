@@ -1,10 +1,34 @@
-.terms{
-    .container{
-        padding-block: 2.5rem;
-        text-align: center;
+.terms {
+  .container {
+    padding-block: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    header{
         display: flex;
         flex-direction: column;
-        gap: 2rem;
-
+        gap: .5rem;
+        h2{
+            text-transform: uppercase !important;
+            font-weight: 900;
+        }
     }
+    .term-group{
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        .list-alpha{
+          margin-top: .5rem;
+          display: flex;
+          flex-direction: column;
+          gap: .25rem;
+          list-style-type: upper-alpha;
+          margin-left: 1.25rem;
+        }
+    }
+  }
+  strong {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
 }
