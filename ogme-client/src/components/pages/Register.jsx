@@ -128,9 +128,7 @@ const Register = () => {
   //=============================================================Return=================================================================//
   return (
     <>
-      {isLoading ? (
-        <RegisterLoader />
-      ) : (
+      {isLoading ? <RegisterLoader /> : null}
         <section className="log-regist-page">
           <div className="container">
             <div className="title">
@@ -259,7 +257,6 @@ const Register = () => {
             </div>
           </div>
         </section>
-      )}
     </>
   );
 };

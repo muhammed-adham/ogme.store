@@ -7,6 +7,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import DialogForgetPass from "../common/DialogForgetPass";
 import { LogedInContext } from "../../context/IsLogedIn";
 import { useMutation } from "react-query";
+import RegisterLoader from "../common/RegisterLoader";
 
 /** === Log Page ===
  *
@@ -20,7 +21,7 @@ const Login = () => {
       onSuccess: (data) => {
         if (data.data.status === 200) {
           navigate("/");
-          scroll(0,0)
+          scroll(0, 0);
           history.replaceState(null, "", "/"), //prevent go back after signup
             toast.success(data.data.message),
             setIsLogedIn(true);
@@ -70,8 +71,7 @@ const Login = () => {
 
     //========================================================================================If Success
     else if (userEmail.value !== 0 && userPassword.value !== 0) {
-        userLogin(userData)
-
+      userLogin(userData);
     }
   };
 
@@ -112,6 +112,7 @@ const Login = () => {
   //=============================================================Return=================================================================//
   return (
     <>
+      {isLoading ? <RegisterLoader /> : null}
       <section className="log-regist-page">
         <div className="container">
           <div className="title">
