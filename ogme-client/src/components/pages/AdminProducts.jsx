@@ -40,7 +40,13 @@ const AdminProducts = () => {
     price: 0,
     onSale: false,
     salePrice: 0,
-    productImages: [{ productImage_$: "" }],
+    productImages: [
+      { productImage_$: "" },
+      { productImage_$: "" },
+      { productImage_$: "" },
+      { productImage_$: "" },
+      { productImage_$: "" },
+    ],
   });
 
   //================================================================Handlers
