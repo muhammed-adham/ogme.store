@@ -38,7 +38,7 @@ const Bottles = () => {
 
   //========================================================================================Fetch Data
   const [productsState, setProductsState] = useState();
-  const limit = 15;
+  const limit = 16;
   const [skipState, setSkipState] = useState(0);
   const [dataLengthState, setDataLengthState] = useState();
 
@@ -74,9 +74,9 @@ const Bottles = () => {
           skipState / limit == i - 1 ? "active-page" : null
         }`}
         key={i}
-        onClick={() => {
+        onClick={async () => {
           setSkipState((i - 1) * limit),
-            refetch(),
+            await refetch(),
             scroll({
               top: 0,
               left: 0,
