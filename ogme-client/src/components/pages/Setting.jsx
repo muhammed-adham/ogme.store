@@ -47,7 +47,7 @@ const Setting = () => {
   //========================================================================================Handle input Data ForMobile
   const [inputData, setInputData] = useState({
     fullName: "",
-    email: "",
+    // email: "",
     mobile: "",
     // address: "",
     // city: "",
@@ -84,7 +84,7 @@ const Setting = () => {
                   type="text"
                   placeholder="Full Name"
                 />
-                <input
+                {/* <input
                   onInput={onInputHandler}
                   value={UserData?.email ? UserData?.email : ""}
                   onKeyDown={enterKeyHandler}
@@ -94,7 +94,7 @@ const Setting = () => {
                   id="email"
                   type="text"
                   placeholder="E-mail"
-                />
+                /> */}
                 <input
                   onInput={onInputHandler}
                   value={UserData?.mobile ? UserData?.mobile : ""}

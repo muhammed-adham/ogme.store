@@ -54,7 +54,7 @@ const Footer = () => {
     ) {
       toast.promise(
         askUsEmail(inputData).then(() => {
-          toast.success("mail sent successfully");
+          // toast.success("mail sent successfully");
           document.getElementById("email-sign").value = "";
           scroll({ top: 0, behavior: "smooth" });
         }),
