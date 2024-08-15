@@ -65,7 +65,7 @@ const Home = () => {
         }
       />
       <section
-        className="meet-artist"
+        className="meet-artist "
         style={{ backgroundImage: `url(${artistBanner?.bannerURL})` }}
       >
         <h2>meet the artist</h2>

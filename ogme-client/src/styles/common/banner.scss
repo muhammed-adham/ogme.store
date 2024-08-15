@@ -1,9 +1,14 @@
 .banner {
   display: flex;
-  height: 37rem;
+  height: 40rem;
   position: relative;
   video {
     height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  img{
+        height: 100%;
     width: 100%;
     object-fit: cover;
   }

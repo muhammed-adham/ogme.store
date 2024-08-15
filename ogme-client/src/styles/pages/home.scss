@@ -1,13 +1,13 @@
 .meet-artist{
-    height: 39.8125rem;
+    height: 64rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 1rem;
     background-size: cover;
-    background-position: 50% 60%;
+    background-position: 50% 0%;
     .btn{
-        @include btn-pr-ghost
+        @include btn-pr-default
     }
 }

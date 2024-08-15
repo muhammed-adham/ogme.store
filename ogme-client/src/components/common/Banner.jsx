@@ -22,7 +22,7 @@ const Banner = ({ src, currentPage, isLoading }) => {
   //==================================================================Return======================================================//
   return (
     <>
-      <section className="banner">
+      <section className="banner container">
         {isLoading || undefined ? (
           <>
             <h2

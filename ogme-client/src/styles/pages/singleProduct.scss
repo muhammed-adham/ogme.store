@@ -2,11 +2,12 @@
   .images-container {
     position: relative;
     .cover-image {
-      height: 37rem;
+      height: 47rem;
       position: relative;
       img {
         position: absolute;
-        object-position: 50% 60%;
+        object-position: 50% 50%;
+        object-fit: cover;
       }
     }
     .owl {
@@ -27,11 +28,12 @@
       position: absolute;
       width: 100%;
       top: 50%;
+      left:0%;
       transform: translateY(-50%);
       font-size: 2.5rem;
       display: flex;
       justify-content: space-between;
-      padding-inline: 2rem;
+      padding-inline: 4rem;
       svg {
         cursor: pointer;
         opacity: 0.5;

@@ -61,6 +61,8 @@ const SingleProduct = () => {
       setProductState(data?.data?.response?.data[0]);
     },
   });
+  console.log(productState?.category.split(" ")[1]);
+  // console.log(id);
 
   //allProducts to generate random cards
   const { data: allProducts, refetch: allProductRefetch } = useQuery(
@@ -166,18 +168,19 @@ const SingleProduct = () => {
   };
   //========================================================================================handle AddToCart Button
   const addToCartHandler = () => {
-    if (isMobileProvided) {
       postProductToCart(cartDataState).then((res) => {
         if (res?.data?.status === 200) {
           setWishCount((prev) => prev + quantity),
             toast.success("added successfuly");
         } else {
-          toast.error("Please Login");
+          toast("Please log in first.",{
+            icon:"⛔️"
+          });
+          navigate("/login");
+          scroll(0,0)
         }
       });
-    } else {
-      setDialog(true);
-    }
+
   };
 
   const buyNowHandler = () => {
@@ -188,7 +191,11 @@ const SingleProduct = () => {
           navigate("/cartlist"),
           scroll(0, 0);
       } else {
-        toast.error("Please Login");
+        toast("Please log in first.",{
+          icon:"⛔️"
+        });
+        navigate("/login");
+        scroll(0,0)
       }
     });
   };
@@ -206,7 +213,7 @@ const SingleProduct = () => {
   return (
     <>
       <section className="single-product ">
-        <div className="images-container">
+        <div className="images-container container">
           <div className="cover-image">
             {loadingSingleProductData ? (
               <>
@@ -222,6 +229,8 @@ const SingleProduct = () => {
               </>
             ) : (
               coverImagesState?.map((img, idx) => {
+                // console.log(img);
+
                 const { fullPath: url, fileName: order } = img;
                 return (
                   <img
@@ -248,7 +257,7 @@ const SingleProduct = () => {
               ></div>
             ))}
           </div>
-          <div className="slide-arrows">
+          <div className="slide-arrows container">
             <IoIosArrowDropleftCircle onClick={slideLeftHandler} />
             <IoIosArrowDroprightCircle onClick={slideRightHandler} />
           </div>
@@ -286,7 +295,7 @@ const SingleProduct = () => {
                 </div>
                 <div className="tertiary">
                   <div className="share-btn" onClick={shareBtnHandler}>
-                    <BsShareFill /> sahre
+                    <BsShareFill /> share
                   </div>
                   <div
                     className="ask-btn"
@@ -300,6 +309,15 @@ const SingleProduct = () => {
               </div>
             </div>
             <div className="details">
+              <p style={{ paddingBottom: "1rem" }}>
+                {productState?.category.split(" ")[1] === "drive"
+                  ? "A delightful magical accessory to add a touch of beauty and personality to your vehicle!"
+                  : productState?.category.split(" ")[1] === "bottles"
+                  ? " LED Hand Painted Glass Bottle, it can be used as a light or even as a vase or wall frame."
+                  : productState?.category.split(" ")[1] === "glassware"
+                  ? "The Hand painted glass looks beautiful from all angles, when the sun's rays pass through it or when lighted with LED ."
+                  : null}
+              </p>
               <p style={{ textTransform: "capitalize" }}>
                 {productState?.brief}
               </p>
@@ -313,7 +331,7 @@ const SingleProduct = () => {
             <h2>you may also like</h2>
           </div>
           <div className="cards-container">
-            <div className="cards">
+            <div className="cards" style={{ justifyContent: "center" }}>
               {randomDataState &&
                 randomDataState?.length > 0 &&
                 randomIdxs.map((rIdx, idx) => {
