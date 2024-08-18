@@ -51,10 +51,12 @@
     .main-content-container{
       display: flex;
       justify-content: space-between;
+      padding-top: 2rem;
       .main-content{
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        gap: 1rem;
+        // justify-content: space-between;
         .price{
           display: flex;
           gap: 1rem;

@@ -133,6 +133,7 @@ module.exports.add = async (req, res, next) => {
               status: 200,
               message: "Welcome " + req.user.fullName.toUpperCase(),
               user,
+              
             };
 
             const cart = await _all(User, {
@@ -515,7 +516,7 @@ module.exports.verify = async (req, res) => {
   try {
     const verifyToken = _JWTVerify(req.params.token);
     if (verifyToken) {
-      const user = await _update(User, req.params.id, { verified: true });
+      const user = await _update(User, req.params.id, { verified: true });      
       if (user) {
         r = {
           status: 200,

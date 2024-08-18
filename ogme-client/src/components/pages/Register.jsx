@@ -1,4 +1,4 @@
-import { GoogleLogin } from "@react-oauth/google";
+// import { GoogleLogin } from "@react-oauth/google";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postNewUser } from "../../utils/axiosConfig";
@@ -19,7 +19,7 @@ const Register = () => {
       onSuccess: (data) => {
         if (data.data.status === 200) {
           navigate("/activate", { state: { email: userData.userEmail } });
-          history.replaceState(null, "", "/"); // Prevent going back after signup
+          history.replaceState(null, "", "/"); // Prevent going back after signUp
           toast.success("Verification email sent");
         } else {
           toast.error("email already exists");

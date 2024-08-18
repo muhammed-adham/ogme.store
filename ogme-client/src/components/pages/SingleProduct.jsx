@@ -61,7 +61,7 @@ const SingleProduct = () => {
       setProductState(data?.data?.response?.data[0]);
     },
   });
-  console.log(productState?.category.split(" ")[1]);
+  // console.log(productState?.category.split(" ")[1]);
   // console.log(id);
 
   //allProducts to generate random cards
@@ -104,6 +104,7 @@ const SingleProduct = () => {
       },
     }
   );
+  
   //========================================================================================State Data
   //adjust data for the post cart api
   const [cartDataState, setCartDataState] = useState();
@@ -168,19 +169,18 @@ const SingleProduct = () => {
   };
   //========================================================================================handle AddToCart Button
   const addToCartHandler = () => {
-      postProductToCart(cartDataState).then((res) => {
-        if (res?.data?.status === 200) {
-          setWishCount((prev) => prev + quantity),
-            toast.success("added successfuly");
-        } else {
-          toast("Please log in first.",{
-            icon:"⛔️"
-          });
-          navigate("/login");
-          scroll(0,0)
-        }
-      });
-
+    postProductToCart(cartDataState).then((res) => {
+      if (res?.data?.status === 200) {
+        setWishCount((prev) => prev + quantity),
+          toast.success("added successfuly");
+      } else {
+        toast("Please log in first.", {
+          icon: "⛔️",
+        });
+        navigate("/login");
+        scroll(0, 0);
+      }
+    });
   };
 
   const buyNowHandler = () => {
@@ -191,11 +191,11 @@ const SingleProduct = () => {
           navigate("/cartlist"),
           scroll(0, 0);
       } else {
-        toast("Please log in first.",{
-          icon:"⛔️"
+        toast("Please log in first.", {
+          icon: "⛔️",
         });
         navigate("/login");
-        scroll(0,0)
+        scroll(0, 0);
       }
     });
   };
@@ -228,17 +228,15 @@ const SingleProduct = () => {
                 </h2>
               </>
             ) : (
-              coverImagesState?.map((img, idx) => {
-                // console.log(img);
-
-                const { fullPath: url, fileName: order } = img;
+              coverImagesState?.map((BannerImg, idx) => {
+                const { fullPath, fileName } = BannerImg;
                 return (
                   <img
                     key={idx}
-                    src={url}
+                    src={fullPath}
                     alt="product image"
                     className={
-                      order.charAt(order.length - 1) - 1 == coverIdx
+                      fileName?.charAt(fileName?.length - 1) - 1 == coverIdx
                         ? "show"
                         : "hide"
                     }

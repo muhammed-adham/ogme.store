@@ -2,21 +2,27 @@ import React, { useEffect } from "react";
 import { useMutation } from "react-query";
 import { verifyUserEmail } from "../../utils/axiosConfig";
 import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const WelcomeOnBoard = () => {
   const { id, token } = useParams();
   const navigate = useNavigate();
   const { mutate: verifyEmail } = useMutation(
-    ({id, token}) => verifyUserEmail(id, token),
+    ({ id, token }) => verifyUserEmail(id, token),
     {
       onSuccess: (data) => {
-        navigate("/");
+        if (data?.data?.status === 200) {
+          toast.success("Verified Successfully!");
+          navigate("/login");
+        }else{
+          toast.error('something went wrong!')
+        }
       },
     }
   );
 
   useEffect(() => {
-    verifyEmail({id, token});
+    verifyEmail({ id, token });
   }, []);
   return (
     <>
@@ -31,7 +37,7 @@ const WelcomeOnBoard = () => {
           gap: "2rem",
         }}
       >
-        <div className="logo" >
+        <div className="logo">
           <img
             src="/images/logo.png"
             alt="logo"
