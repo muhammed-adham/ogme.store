@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
 /** === Banner ===
@@ -19,6 +19,32 @@ const Banner = ({ src, currentPage, isLoading }) => {
     setIsVideo(videoPattern.test(src));
   }, [src]);
 
+  //LowPowerMode AutoPlay on Safari 
+  const videoRef = useRef(null);
+  const isLowPowerMode = async () => {
+    const battery = await navigator.getBattery();
+    return battery.level <= 0.2 && !battery.charging;
+  };
+  useEffect(() => {
+    const handleAutoplay = async () => {
+      const isLow = await isLowPowerMode();
+
+      if (isLow) {
+        // Low power mode
+        videoRef.current.autoplay = true;
+        videoRef.current.muted = true;
+        videoRef.current.playsInline = true;
+        videoRef.current.loop = true;
+        videoRef.current.controls = false;
+
+        // Request user interaction to play the video
+        videoRef.current.addEventListener("canplaythrough", () => {
+          videoRef.current.play();
+        });
+      }
+    };
+    handleAutoplay();
+  }, []);
   //==================================================================Return======================================================//
   return (
     <>
@@ -40,10 +66,11 @@ const Banner = ({ src, currentPage, isLoading }) => {
           <video
             src={src}
             autoPlay={true}
-            muted
-            playsInline
+            muted={true}
+            playsInline={true}
             loop={true}
             controls={false}
+            ref={videoRef}
           ></video>
         ) : (
           <img src={src} alt="Banner Image" />
