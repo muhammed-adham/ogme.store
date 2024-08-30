@@ -1,0 +1,44 @@
+.admin-panel {
+  padding-block: 2rem;
+  .header {
+    padding:0 0 2rem 0;
+    font-size: 2rem;
+    text-transform: uppercase;
+    color: rgba($color: #000000, $alpha: 0.3);
+    text-align: left;
+  }
+  .nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    a {
+      padding: 0.5rem;
+      font-weight: 700;
+      transition: 0.2s ease all;
+      border: 1px solid white;
+      opacity: 0.5;
+      border: 1px solid black;
+      &:hover {
+        opacity: 1;
+      }
+    }
+    .active {
+      opacity: 1;
+      color: white;
+      font-weight: 700;
+      background-color: black;
+    }
+  }
+  h1 {
+    text-align: center;
+    padding-block: 8rem;
+    span {
+      font-size: 1.5rem;
+      line-height: 4rem;
+      color: gray;
+      font-weight: 500;
+    }
+  }
+
+}

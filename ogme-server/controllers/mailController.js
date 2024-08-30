@@ -7,9 +7,9 @@ const transporter = nodemailer.createTransport({
     user: `${process.env.MAILEMAIL}`,
     pass: `${process.env.MAILEMAILPASSWORD}`,
   },
-  // tls: {
-  //     rejectUnauthorized: false,
-  //   },
+// tls: {
+//   rejectUnauthorized: false,
+//   },
 });
 
 module.exports.mailForm = (req, res) => {

@@ -1,0 +1,49 @@
+.category-page {
+  .container {
+    padding-block: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+    .title {
+      text-align: center;
+      width: 32rem;
+    }
+    .cards-container {
+      width: 100%;
+      .cards {
+        display: flex;
+        flex-wrap: wrap;
+        // justify-content: space-between
+        column-gap: 3.3rem;
+        row-gap: 4.25rem;
+      }
+    }
+  }
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  .page-no {
+    opacity: 0.5;
+    cursor: pointer;
+    padding-inline: 0rem;
+    transition: all 0.3s ease;
+    &:hover {
+      opacity: 1;
+    }
+  }
+  .active-page {
+    opacity: 1;
+    border: black solid 1.5px;
+    padding-inline: 2rem;
+    padding-block: 0.2rem;
+    border-radius: 0.5rem;
+    background-color: black;
+    color: white;
+  }
+}

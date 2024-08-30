@@ -1,0 +1,81 @@
+.card-order-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem;
+    height: 12rem;
+    width: 64vw;
+    box-shadow: 0 2px 6px rgba($color: #000000, $alpha: .3);
+    .order-details{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .info{
+            display: flex;
+            gap: 1.2rem;
+            width: 16rem;
+        }
+    }
+    .progress-bar{
+        background-color: #eee;
+        height: .5rem;
+        border-radius: 5rem;
+        .progress-bar-fill{
+            background-color: black;
+            height: .5rem;
+            border-radius: 5rem;
+            width: 0%;
+            transition: 2s ease all;
+        }
+        .check-marks{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .check{
+                height: 1.5rem;
+                width: 1.5rem;
+                background-color: #ccc;
+                border-radius: 50%;
+                position: relative;
+                top: -1.1rem;
+                &::after{
+                    content: '';
+                    position: absolute;
+                    left: 35%;
+                    top: 20%;
+                    width: 5px;
+                    height: 10px;
+                    border: solid white;
+                    border-width: 0 3px 3px 0;
+                    -webkit-transform: rotate(45deg);
+                    -ms-transform: rotate(45deg);
+                    transform: rotate(45deg);
+                    opacity: 0;
+                }
+            }
+        }
+    }
+    .order-status{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: .8rem;
+        opacity: .5;
+        svg{
+            font-size: 1.8rem;
+        }
+        .status-group{
+            display: flex;
+            gap: .5rem;
+            align-items: center;
+        }
+    }
+}
+
+//========================================================================================Feature Classes
+.process-checked{
+    background-color: black !important;
+    &::after{
+        opacity: 1 !important;
+    }
+}

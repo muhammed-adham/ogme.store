@@ -1,0 +1,19 @@
+.fqa {
+  .container {
+    padding-block: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    h2 {
+      text-transform: uppercase !important;
+      font-weight: 900;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .content-group{
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+    }
+  }
+}

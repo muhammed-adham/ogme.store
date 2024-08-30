@@ -84,7 +84,8 @@ module.exports.add = async (req, res, next) => {
 
         axios.defaults.baseURL = axiosURL(req.protocol, req.hostname);
         const emailVerifyURL = `mail/custom`;
-
+	console.log("hello");      
+	console.log(axiosURL(req.protocol, req.hostname));
         /** Sending Verification Email */
         await axios
           .post(
@@ -97,7 +98,7 @@ module.exports.add = async (req, res, next) => {
               subject: `Welcome ${add_user.fullName}`,
               message: "",
               //   url: `${process.env.URL}user/verify/${add_user._id}/${emailVerifyToken}`,
-              url: `${process.env.URL}welcome/${add_user._id}/${emailVerifyToken}`,
+              url: `${process.env.URL}/welcome/${add_user._id}/${emailVerifyToken}`,
               template: "./views/newUserEmail.ejs",
             },
             {
@@ -387,7 +388,7 @@ module.exports.sendPasswordResetToken = async (req, res) => {
     });
 
     // const resetLink = `${protocol}://${host}${port}/user/reset-password/${id}/${token}`;
-    const resetLink = `${process.env.URL}reset-password/${id}/${token}`;
+    const resetLink = `${process.env.URL}/reset-password/${id}/${token}`;
 
     const emailData = {
       sender: "Ogme Store",

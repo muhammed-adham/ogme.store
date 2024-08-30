@@ -1,0 +1,150 @@
+.single-product {
+  .images-container {
+    position: relative;
+    .cover-image {
+      height: 47rem;
+      position: relative;
+      img {
+        position: absolute;
+        object-position: 50% 50%;
+        object-fit: cover;
+      }
+    }
+    .owl {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      padding: 1rem;
+      .carousel {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 3rem;
+        background-color: black;
+        opacity: 0.5;
+        transition: .4s ease all;
+      }
+    }
+    .slide-arrows {
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      left:0%;
+      transform: translateY(-50%);
+      font-size: 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      padding-inline: 4rem;
+      svg {
+        cursor: pointer;
+        opacity: 0.5;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+.container{
+  .section-product-info{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    .main-content-container{
+      display: flex;
+      justify-content: space-between;
+      padding-top: 2rem;
+      .main-content{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        // justify-content: space-between;
+        .price{
+          display: flex;
+          gap: 1rem;
+          del{
+            color: $danger;
+          }
+        }
+        p{
+          width: 32rem;
+        }
+      }
+      .actions-container{
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        .top-widget{
+          display: flex;
+          gap: 1.75rem;
+          .quantity{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 8rem;
+            border: 1px solid black;
+            padding: 0 .75rem;
+            // gap: 1.5rem;
+            svg{
+              cursor: pointer;
+              opacity: .5;
+              &:hover{
+                opacity: 1;
+              }
+            }
+          }
+          .add-to-cart{
+            @include  btn-pr-default;
+            min-width:18rem;
+            width: 100%
+          }
+        }
+        .buy-it-now{
+          @include btn-pr-ghost;
+          width:100%;
+        }
+        .tertiary{
+          display: flex;
+          justify-content: flex-end;
+          gap: 2rem;
+          .share-btn{
+            @include btn-tr;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+          }
+          .ask-btn{
+            @include btn-tr;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+          }
+        }
+      }
+    }
+    .details{
+      text-align: center;
+      padding-block: 2.5rem;
+      border-bottom: 1px solid black;
+    }
+  }
+}
+}
+
+
+
+
+
+//========================================================================================Feature Classes
+//========================================================================================Show/Hide Product Cover Image
+.show {
+  opacity: 1;
+}
+
+.hide {
+  opacity: 0;
+}
+
+//========================================================================================Active carousel
+.active-carousel {
+  opacity: 1 !important;
+  width: 2rem !important;
+}
