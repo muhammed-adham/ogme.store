@@ -25,7 +25,7 @@ const RegisterConfirm = () => {
               "https://mail.google.com/mail/u/0/#search/from%3A(ogme.store)+in%3Aanywhere")
           }
         >
-          <img src="./icons/gmail.svg" alt="" />
+          <img src="https://res.cloudinary.com/dgu9xnvxf/image/upload/v1724686424/gmail_p08cwz.svg" alt="" />
           <b>Open Gmail</b>
           <CiShare1 />
         </div>

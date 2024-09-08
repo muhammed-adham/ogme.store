@@ -1,0 +1,77 @@
+server {
+    server_name ogme.store ;
+
+    root /usr/share/nginx/html/ogme-client/dist/;
+    index index.html;
+
+    location /{
+        try_files $uri $uri/ /index.html;
+    }
+
+
+# Proxy pass for API requests
+    location /api/ {
+            proxy_pass http://localhost:3000/;  # Replace with your backend server address if different
+	    proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+
+            # Setting headers to match the axios configuration
+            proxy_set_header Accept "application/json";
+            proxy_set_header Content-Type "application/x-www-form-urlencoded";
+
+            # Optional: Set withCredentials header if needed
+             proxy_set_header Cookie $http_cookie;
+
+            # Optional: Handle CORS if your frontend and backend are on different domains
+      #      add_header Access-Control-Allow-Origin *;
+       #     add_header Access-Control-Allow-Methods "GET, POST, OPTIONS, DELETE, PUT";
+        #    add_header Access-Control-Allow-Headers "Authorization, Content-Type, Accept";
+
+            # Cache settings can be added here if necessary
+         #    proxy_cache_valid 200 1m;
+
+  }
+
+
+
+
+types {
+
+    application/javascript js jsx;
+
+   text/css css;
+
+   text/html html;
+
+  image/png png;
+
+ image/jpeg jpg;
+
+    # Add other MIME types if needed
+
+}
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/ogme.store/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/ogme.store/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+
+server {
+    if ($host = ogme.store) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name ogme.store ;
+    return 404; # managed by Certbot
+
+
+}
+

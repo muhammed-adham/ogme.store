@@ -61,7 +61,9 @@ module.exports.axiosURL = (protocol, host) =>{
         return `${protocol}://${host}:${port}/`;     // Return the complete BaseURL in Development Environment.
     }
     else {
-        return `${protocol}://${host}/`;            // Return the complete BaseURL in Production Environment.
+	  return `https://ogme.store/`;  
+//        return `${protocol}://${host}/`;            // Return the complete BaseURL in Production Environment.
+
     }
 }
 /** ./Axios Base URL */

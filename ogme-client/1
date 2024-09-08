@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosConfig = axios.create({
-	baseURL: "https://ogme.store/api",
+  baseURL: "https://ogme.store",
   withCredentials: true,
 });
 export const request = ({ ...option }) => {
