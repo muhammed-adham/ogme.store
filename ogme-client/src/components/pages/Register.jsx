@@ -17,7 +17,7 @@ const Register = () => {
     (userData) => postNewUser(userData),
     {
       onSuccess: (data) => {
-        
+	      console.log(data);
         if (data.data.status === 200) {
           navigate("/activate", { state: { email: userData.userEmail } });
           history.replaceState(null, "", "/"); // Prevent going back after signUp
