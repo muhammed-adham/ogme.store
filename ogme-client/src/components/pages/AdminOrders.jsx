@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import {
+  deleteOrder,
   getAllOrders,
   getUser,
   updateOrderState,
 } from "../../utils/axiosConfig";
 import toast from "react-hot-toast";
+import { IoMdClose } from "react-icons/io";
 
 const AdminOrders = () => {
   //States
@@ -88,6 +90,12 @@ const AdminOrders = () => {
     }
   };
 
+  //Delete Btn Handler
+  const deleteHandler = (id) => {
+    deleteOrder(id).then(toast.success("order deleted successfully"));
+    setOrdersState((prev) => prev.filter((item) => item._id != id));
+  };
+
   //Search Handler
   const searchHandler = (e) => {
     setTermState(e.target.value);
@@ -124,7 +132,7 @@ const AdminOrders = () => {
             type="text"
             placeholder="Search by Phone number..."
             onInput={searchHandler}
-            style={{marginBottom:"2rem"}}
+            style={{ marginBottom: "2rem" }}
           />
         </div>
         {isLoading || isFetching || userDataLoading ? (
@@ -141,6 +149,7 @@ const AdminOrders = () => {
                 <th>date</th>
                 <th>status</th>
                 <th>save</th>
+                <th>delete</th>
               </tr>
             </thead>
             <tbody>
@@ -197,6 +206,16 @@ const AdminOrders = () => {
                           onClick={(e) => saveHandler(e, _id)}
                         >
                           Save
+                        </div>
+                      </td>
+                      <td>
+                        <div
+                          className="btn btn-update btn-remove "
+                          onClick={() => {
+                            deleteHandler(_id);
+                          }}
+                        >
+                          <IoMdClose />
                         </div>
                       </td>
                     </tr>

@@ -31,6 +31,7 @@ import RegisterConfirm from "./components/pages/RegisterConfirm";
 import WelcomeOnBoard from "./components/pages/WelcomeOnBoard";
 import ResetOnBoard from "./components/pages/ResetOnBoard";
 import ResetPassword from "./components/pages/ResetPassword";
+import InstaPay from "./components/pages/InstaPay";
 
 const App = () => {
   //Google Auth
@@ -60,6 +61,7 @@ const App = () => {
         { path: "/fqa", element: <FAQ /> },
         { path: "/terms", element: <Terms /> },
         { path: "/ask", element: <Ask /> },
+        { path: "/instapay", element: <InstaPay /> },
         { path: "/register", element: <Register /> },
         { path: "/login", element: <Login /> },
         { path: "/cartlist", element: <Cart /> },

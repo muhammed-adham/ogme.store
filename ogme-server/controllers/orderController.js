@@ -22,7 +22,7 @@ module.exports.all = async (req, res) => {
     const skip = filter._s, limit = filter._l;
     delete filter._s;
     delete filter._l;
-    filter['user'] = req.user._id;
+    // filter['user'] = req.user._id;
 
     const response = Object.keys(req.query).length > 0 ?
         await _all(Order, filter, {skip, limit}) :

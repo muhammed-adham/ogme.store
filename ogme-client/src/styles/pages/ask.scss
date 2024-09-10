@@ -1,35 +1,69 @@
-.ask-us{
-    .container{
-        padding-block: 2.5rem;
-        .form-container{
+.ask-us {
+  .container {
+    padding-block: 2.5rem;
+    .form-container {
+      display: flex;
+      justify-content: space-between;
+      .title {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .form-group {
+        width: 40vw;
+        form {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          input,
+          textarea {
+            height: 4rem;
+            padding: 2rem;
+          }
+          textarea {
+            height: 16rem;
+            resize: none;
+            position: relative;
+          }
+          .pasteArea {
+            width: 100%;
+            height: 20rem;
+            min-height: 100px;
+            // max-height: 10rem;
+            border: 1px solid rgba(0, 0, 0, 0.7);
+            border-radius: 4px;
             display: flex;
-            justify-content: space-between;
-            .title{
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-            }
-            .form-group{
-                width: 40vw;
-                form{
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1rem;
-                    input, textarea{
-                        height: 4rem;
-                        padding: 2rem;
-                    }
-                    textarea{
-                        height: 16rem;
-                        resize: none
-                    }
-
-                    .submit{
-                        @include btn-pr-default;
-                        width: 100%;
-                    }
-                }
-            }
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            margin: 10px 0;
+            padding: 10px;
+            position: relative;
         }
+        .placeholder {
+            // padding: 2rem;
+            position: absolute;
+            top: 2rem;
+            left:2rem;
+            color: rgba(0, 0, 0, 0.7);
+            font-size: 1.5rem;
+            // Make placeholder non-interactive
+            pointer-events: none;
+            user-select: none;
+            cursor: pointer;
+          } 
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+  
+          .submit {
+            @include btn-pr-default;
+            width: 100%;
+          }
+        }
+      }
     }
+  }
 }

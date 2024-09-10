@@ -65,6 +65,16 @@ export const addProductImages = async (data) => {
   return await request({ url: `file`, method: "post", data });
 };
 
+//Get FeatureImage 
+export const getFeatureImage = async (name) => {
+  return await request({ url: `file?itemName=${name}` });
+};
+
+//Update Product Image
+export const updateProductImages = async (id,data) => {
+  return await request({ url: `file/${id}`, method: "post", data });
+};
+
 //Delete Product Image
 export const deleteProductImages = async (id) => {
   return await request({ url: `file/${id}`, method: "delete" });
@@ -177,6 +187,11 @@ export const getAllOrders = async () => {
 //Update Order State
 export const updateOrderState = async (id, state) => {
   return await request({ url: `order/${id}?state=${state}` });
+};
+
+//Delete Order
+export const deleteOrder = async (id) => {
+  return await request({ url: `order/${id}`, method: "delete" });
 };
 
 //========================================================================================Email

@@ -13,6 +13,7 @@ import { WishCountContext } from "../../context/WishCountContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import DialogAddress from "../common/DialogAddress";
+import { BsCash } from "react-icons/bs";
 
 /**
  *  * === CartPage ===
@@ -79,7 +80,7 @@ const Cart = () => {
       setCartProducts((prev) =>
         prev.map((prd) => (prd._id === data._id ? update : prd))
       );
-    } 
+    }
   };
 
   //========================================================================================Calculate the total price
@@ -105,16 +106,23 @@ const Cart = () => {
 
   //========================================================================================CheckOut Handler
   // const { data: userData } = useQuery("userData", GetUserData);
+  const [isChecked, setIsChecked] = useState("cash");
 
   const checkoutHandler = () => {
-    cartProducts.map((el) => {
-      removeProductCart(el._id);
-      postUserOrder(el);
-    })
+    if (isChecked === "insta") {
+      // console.log("insta");
+      navigate("/instapay");
+      
+    } else {
+      cartProducts.map((el) => {
+        removeProductCart(el._id);
+        postUserOrder(el);
+      });
       toast.success("your order has been processed"),
-      setCartProducts(null),
-      setWishCount(0),
-      navigate("/account/orders");
+        setCartProducts(null),
+        setWishCount(0),
+        navigate("/account/orders");
+    }
   };
 
   //=================================================================Return=========================================================//
@@ -177,17 +185,27 @@ const Cart = () => {
               <div className="methods">
                 <label
                   className="method-container"
-                  onClick={() => toast.error("not yet available")}
+                  // onClick={() => toast.error("not yet available")}
                 >
-                  Insta Pay
                   <MdMobileFriendly />
-                  <input type="radio" name="paymethod" disabled />
+                  Insta Pay
+                  <input
+                    type="radio"
+                    name="paymethod"
+                    onChange={() => setIsChecked("insta")}
+                  />
                   <span className="check-mark"></span>
                 </label>
                 <label className="method-container">
+                  {/* <IoCashOutline /> */}
+                  <BsCash />
                   Cash On Deliver
-                  <IoCashOutline />
-                  <input type="radio" name="paymethod" defaultChecked />
+                  <input
+                    type="radio"
+                    name="paymethod"
+                    defaultChecked
+                    onChange={() => setIsChecked("cash")}
+                  />
                   <span className="check-mark"></span>
                 </label>
               </div>

@@ -6,8 +6,10 @@ import {
   deleteProduct,
   deleteProductImages,
   getCategoryProducts,
+  getFeatureImage,
   getProductImages,
   updateProduct,
+  updateProductImages,
 } from "../../utils/axiosConfig";
 import toast from "react-hot-toast";
 import { CiWarning } from "react-icons/ci";
@@ -46,6 +48,9 @@ const AdminProducts = () => {
       { productImage_$: "" },
       { productImage_$: "" },
       { productImage_$: "" },
+      { productImage_$: "" },
+      { productImage_$: "" },
+      { productImage_$: "" },
     ],
   });
 
@@ -57,9 +62,33 @@ const AdminProducts = () => {
     });
   };
 
+  // Input handler
+  const subInputHandler = (e) => {
+    const { name, value } = e.target;
+    const [parentKey, index] = name.split(".");
+    
+
+    setInputState((prevState) => {
+      const updatedProductImages = [...prevState[parentKey]];
+      updatedProductImages[index] = {
+        ...updatedProductImages[index],
+        [`productImage_${parseInt(index)}`]: value,
+      };
+
+      return {
+        ...prevState,
+        [parentKey]: updatedProductImages,
+      };
+    });
+  };
+
+
   //Add Handler
   const submitHandler = (e) => {
     e.preventDefault();
+    scroll({ left: 0, top: 300, behavior: "smooth" });
+    toast.loading("saving", { duration: 1000 });
+
     const {
       productName,
       category,
@@ -68,8 +97,7 @@ const AdminProducts = () => {
       price,
       onSale,
       salePrice,
-      productImage_2,
-      productImage_3,
+      productImages,
     } = inputState;
 
     const data = {
@@ -80,37 +108,43 @@ const AdminProducts = () => {
       price,
       _sale: { onSale, price: salePrice },
     };
+
+    //Add product to data base
     addProducts(data).then((res) => {
       if (res.data.status === 500) {
         toast.error(res.data.message);
+        //if success
       } else {
-        refetch();
-        const itemID = res?.data?.data._id;
+        //default data for product images
+        const baseData = {
+          itemID: res?.data?.data?._id,
+          itemName: productName,
+          fileType: "image",
+        };
 
-        const data1 = {
+        // Add main image same feature image of the product
+        const mainImage = {
           fullPath: featureImage,
-          fileName: `${productName.split(" ").join("-")}-1`,
-          itemID,
-          itemName: productName,
-          fileType: "image",
+          fileName: `${productName.toLowerCase().split(" ").join("-")}-1`,
+          ...baseData,
         };
-        const data2 = {
-          fullPath: productImage_2,
-          fileName: `${productName.split(" ").join("-")}-2`,
-          itemID,
-          itemName: productName,
-          fileType: "image",
-        };
-        const data3 = {
-          fullPath: productImage_3,
-          fileName: `${productName.split(" ").join("-")}-3`,
-          itemID,
-          itemName: productName,
-          fileType: "image",
-        };
-        addProductImages(data1);
-        addProductImages(data2);
-        addProductImages(data3);
+        addProductImages(mainImage);
+
+        // Iterate over productImages and add non-empty images
+        productImages.forEach((image, idx) => {
+          const imageKey = `productImage_${idx}`;
+
+          if (image[imageKey]) {
+            const data = {
+              fullPath: image[imageKey],
+              fileName: `${productName.toLowerCase().split(" ").join("-")}-${idx + 1}`,
+              ...baseData,
+            };
+            addProductImages(data);
+          }
+        });
+
+        refetch();
 
         setInputState({
           productName: "",
@@ -120,11 +154,10 @@ const AdminProducts = () => {
           price: 0,
           onSale: false,
           salePrice: 0,
-          productImage_2: "",
-          productImage_3: "",
+          productImages: Array(9).fill({}),
         });
 
-        toast.success("Added Successuflly");
+        toast.success("Added Successfully");
       }
     });
   };
@@ -136,11 +169,7 @@ const AdminProducts = () => {
         res?.data?.response?.data?.map((el) => {
           deleteProductImages(el._id).then((res) => {
             if (res?.data?.status === 200) {
-              setInputState({
-                ...inputState,
-                productImage_2: "",
-                productImage_3: "",
-              });
+              cancelHandler()
             } else {
               toast.error("something went wrong!");
             }
@@ -148,8 +177,9 @@ const AdminProducts = () => {
         });
       });
       refetch();
-      toast.success("Deleted Successuflly");
+      toast.success("Deleted Successfully");
     });
+    
   };
 
   //Update Handler
@@ -175,17 +205,17 @@ const AdminProducts = () => {
         onSale: target._sale.onSale,
         salePrice: target._sale.price,
 
-        productImages: [
-          ...data.map((item, index) => ({
-            [`productImage_${index + 2}`]: item?.fullPath || "",
-          })),
-        ],
+        productImages: Array.from({ length: 9 }, (_, index) => ({
+          [`productImage_${index}`]: data[index]?.fullPath || "",
+        })),
       });
     });
   };
 
   //Submit Update Handler
-  const sumbitUpdate = () => {
+  const submitUpdate = () => {
+    scroll({ left: 0, top: 300, behavior: "smooth" });
+
     const {
       id,
       productName,
@@ -195,8 +225,7 @@ const AdminProducts = () => {
       price,
       onSale,
       salePrice,
-      productImage_2,
-      productImage_3,
+      productImages,
     } = inputState;
 
     const data = {
@@ -212,41 +241,36 @@ const AdminProducts = () => {
       if (res.data.status === 500) {
         toast.error(res.data.message);
       } else {
-        const data1 = {
-          fullPath: featureImage,
-          fileName: `${productName.split(" ").join("-")}-1`,
-          itemID: inputState?.id,
+        const baseData = {
+          itemID: id,
           itemName: productName,
           fileType: "image",
         };
-        addProductImages(data1);
+        // Add main image same feature image of the product
+        const mainImage = {
+          fullPath: featureImage,
+          fileName: `${productName.toLowerCase().split(" ").join("-")}-1`,
+          ...baseData,
+        };
+        addProductImages(mainImage);
 
-        if (!inputState?.productImage_2 == "") {
-          const data2 = {
-            fullPath: productImage_2,
-            fileName: `${productName.split(" ").join("-")}-2`,
-            itemID: inputState?.id,
-            itemName: productName,
-            fileType: "image",
-          };
+        // Iterate over productImages and add non-empty images
+        productImages.forEach((image, idx) => {
+          const imageKey = `productImage_${idx}`;
 
-          addProductImages(data2);
-        }
-
-        if (!inputState?.productImage_3 == "") {
-          const data3 = {
-            fullPath: productImage_3,
-            fileName: `${productName.split(" ").join("-")}-3`,
-            itemID: inputState?.id,
-            itemName: productName,
-            fileType: "image",
-          };
-
-          addProductImages(data3);
-        }
+          if (image[imageKey]) {
+            const data = {
+              fullPath: image[imageKey],
+              fileName: `${productName.toLowerCase().split(" ").join("-")}-${idx + 1}`,
+              ...baseData,
+            };
+            addProductImages(data);
+          }
+        });
 
         refetch();
 
+        // Reset input state
         setInputState({
           productName: "",
           category: "",
@@ -255,34 +279,72 @@ const AdminProducts = () => {
           price: 0,
           onSale: false,
           salePrice: 0,
-          productImage_2: "",
-          productImage_3: "",
+          productImages: Array(9).fill({}), // Reset productImages to an array of empty objects
         });
 
         setIsUpdating(false);
 
-        toast.success("Added Successuflly");
+        toast.success("Added Successfully");
       }
     });
+  };
+
+  // Cancel Btn Handler
+  const cancelHandler = () => {
+    scroll({ left: 0, top: 300, behavior: "smooth" });
+
+    refetch();
+
+    // Reset input state
+    setInputState({
+      productName: "",
+      category: "",
+      brief: "",
+      featureImage: "",
+      price: 0,
+      onSale: false,
+      salePrice: 0,
+      productImages: Array(9).fill({}), // Reset productImages to an array of empty objects
+    });
+
+    setIsUpdating(false);
   };
 
   //Submit Update Handler
   const clearImagesHandler = () => {
     getProductImages(inputState.id).then((res) => {
-      res?.data?.response?.data?.map((el) => {
-        deleteProductImages(el._id).then((res) => {
-          if (res?.data?.status === 200) {
-            toast.success(res?.data.message);
-            setInputState({
-              ...inputState,
-              productImage_2: "",
-              productImage_3: "",
-            });
-          } else {
-            toast.error("something went wrong!");
-          }
+      const images = res?.data?.response?.data;
+
+      if (images && images.length > 0) {
+        const deletePromises = images.map((el) => {
+          return deleteProductImages(el._id).then((res) => {
+            if (res?.data?.status === 200) {
+            } else {
+              toast.error("Something went wrong!");
+            }
+          });
         });
-      });
+
+        // Wait for all delete promises to resolve
+        Promise.all(deletePromises).then(() => {
+          // Clear images in the input state, keeping the first one
+          const clearedImages = [
+            // images[0], // Keep the first image
+            ...Array(9).fill({}), // Clear the remaining images
+          ];
+
+          setInputState((prevState) => ({
+            ...prevState,
+            productImages: clearedImages,
+          }));
+
+          toast.success("Images cleared successfully");
+        });
+      } else if (images && images.length === 1) {
+        toast("no additional images to delete.", { icon: "⚠️" });
+      } else {
+        toast.success("No images to delete.");
+      }
     });
   };
 
@@ -396,54 +458,57 @@ const AdminProducts = () => {
 
             <div className="form-group">
               <label htmlFor="product-images">product images</label>
-              {inputState?.productImages?.map((el, idx) => {
-                return (
-                  <input
-                    onInput={inputHandler}
-                    value={el[`productImage_${idx + 2}`] || ""}
-                    type="url"
-                    id={`productImage_${idx + 2}`}
-                    name={`productImage_${idx + 2}`}
-                    placeholder="URL"
-                  />
-                );
-              })}
-              {/* <input
-                onInput={inputHandler}
-                value={inputState.productImage_2}
-                type="url"
-                id="productImage_2"
-                name="productImage_2"
-                placeholder="Shadow Self"
-              />
-              <input
-                onInput={inputHandler}
-                value={inputState.productImage_3}
-                type="url"
-                id="productImage_3"
-                name="productImage_3"
-                placeholder="Car View"
-              /> */}
               {isUpdating ? (
                 <>
                   <span className="warning-info">
                     <CiWarning />
-                    For changing Product Images you must clear them first!
+                    For changing any of Product Images you must clear all first!
                   </span>
                   <div className="btn-clear" onClick={clearImagesHandler}>
-                    clear product images
+                    {/* <CiWarning /> */}
+                    clear all images
                   </div>
                 </>
               ) : null}
+              {inputState?.productImages?.map((el, idx) => {
+                return (
+                  <input
+                    // disabled={idx === 0 ? true : false}
+                    className={`${idx === 0 ? "disabled-input-image" : null}`}
+                    key={idx}
+                    onInput={subInputHandler}
+                    value={
+                      idx === 0
+                        ? inputState?.featureImage
+                        : el[`productImage_${idx}`] || ""
+                    }
+                    type="url"
+                    id={`productImage_${idx}`}
+                    name={`productImages.${idx}`}
+                    placeholder={idx===0?"This will be the same provided feature image by default":"URL"}
+                  />
+                );
+              })}
+
             </div>
             {isUpdating ? (
-              <div className="btn-submit" onClick={sumbitUpdate}>
-                Update Product
-              </div>
+              <>
+                <div className="btn-submit" onClick={submitUpdate}>
+                  Update Product
+                </div>
+                <div className="btn btn-cancel" onClick={cancelHandler}>
+                  Cancel
+                </div>
+              </>
             ) : (
+              <>
               <div className="btn-submit" onClick={submitHandler}>
                 Add Product
               </div>
+              <div className="btn btn-cancel" onClick={cancelHandler}>
+                  Clear
+                </div>
+              </>
             )}
           </form>
         </section>

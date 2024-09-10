@@ -163,8 +163,8 @@ passport.deserializeUser(function (obj, done) {
 /** ./Passport JS For Authentication And Authorization */
 
 /** CORS */
-// const cors = require("cors");
-// app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+const cors = require("cors");
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 /** CORS */
 
 /** 12- APP GLOBALS */
