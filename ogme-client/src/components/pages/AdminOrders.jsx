@@ -153,7 +153,7 @@ const AdminOrders = () => {
               </tr>
             </thead>
             <tbody>
-              {mergedData?.toReversed()?.map((data, idx) => {
+              {mergedData?.map((data, idx) => {
                 const {
                   order: {
                     _id,

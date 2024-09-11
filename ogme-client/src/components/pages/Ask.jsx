@@ -7,18 +7,6 @@ import { useNavigate } from "react-router-dom";
  *
  * This component represents the "Ask Us" Page.
  *
- * Layout:
- * - .ask-us: The main container for the "Ask Us" section.
- *   - .container: The container for the section contents.
- *     - .form-container: The container for the form.
- *       - .title: The container for the section title and description.
- *         - <h2>: The heading element for the section title.
- *         - <p>: The paragraph element for the section description.
- *       - .form-group: The container for the form inputs and submit button.
- *         - <form>: The form element.
- *           - <input>*3: The input element field.
- *           - <textarea>: The textarea element for the message field.
- *           - div.submit: The submit button element.
  */
 const Ask = () => {
   //========================================================================================Handle input Data ForMobile

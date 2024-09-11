@@ -1,5 +1,10 @@
 import React, { useContext, useState } from "react";
-import { askUsEmail, GetUserProfile } from "../../utils/axiosConfig";
+import {
+  askUsEmail,
+  GetUserProfile,
+  postUserOrder,
+  removeProductCart,
+} from "../../utils/axiosConfig";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { WishCountContext } from "../../context/WishCountContext";
@@ -9,18 +14,6 @@ import { useQuery } from "react-query";
  *
  * This component represents the "Ask Us" Page.
  *
- * Layout:
- * - .ask-us: The main container for the "Ask Us" section.
- *   - .container: The container for the section contents.
- *     - .form-container: The container for the form.
- *       - .title: The container for the section title and description.
- *         - <h2>: The heading element for the section title.
- *         - <p>: The paragraph element for the section description.
- *       - .form-group: The container for the form inputs and submit button.
- *         - <form>: The form element.
- *           - <input>*3: The input element field.
- *           - <textarea>: The textarea element for the message field.
- *           - div.submit: The submit button element.
  */
 const InstaPay = () => {
   //========================================================================================Handle input Data ForMobile
@@ -30,7 +23,7 @@ const InstaPay = () => {
   //========================================================================================handle data from axios
   const [cartProducts, setCartProducts] = useState();
 
-  const { isLoading } = useQuery("userProfile", GetUserProfile, {
+  useQuery("userProfile", GetUserProfile, {
     onSuccess: (data) => {
       setCartProducts(data?.data?.cart?.response?.data);
     },
@@ -42,7 +35,6 @@ const InstaPay = () => {
     userName: "",
     email: "",
     phone: "",
-    message: "",
   });
 
   const onChangeHandler = (e) => {
@@ -59,26 +51,31 @@ const InstaPay = () => {
     });
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    const { userName, email, phone, message } = inputData;
+    const loadingToastId = toast.loading("Loading...");
+    
+    // Handle the image upload and await the response
+    const uploadResponse = await handleUpload();
+
+    const { userName, email, phone } = inputData;
+
     const data = {
       name: userName,
       phone,
       email,
-      message,
+      message: uploadResponse,
     };
-    if (!name || !phone || !email || !message) {
+
+    if (!userName || !phone || !email || !uploadResponse) {
       toast.error("please provide valid information");
     } else {
-      askUsEmail(data).then(() => {
-        toast.success("Mail Sent Successfully");
-        navigate("/");
-      });
-      cartProducts.map((el) => {
+      await askUsEmail(data);
+      await cartProducts.map((el) => {
         removeProductCart(el._id);
         postUserOrder(el);
       });
+      toast.dismiss(loadingToastId); // Dismiss the loading toast
       toast.success("your order has been processed"),
         setCartProducts(null),
         setWishCount(0),
@@ -86,30 +83,42 @@ const InstaPay = () => {
     }
   };
 
-  const [screenshot, setScreenshot] = useState("");
-  const [pasteContent, setPasteContent] = useState('');
+  const [file, setFile] = useState(null);
 
-  const handlePaste = (event) => {
-    event.preventDefault();
-    const items = event.clipboardData.items;
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      if (item.type.startsWith('image/')) {
-        const file = item.getAsFile();
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          setScreenshot(e.target.result);
-          setPasteContent(''); // Clear the placeholder
-        };
-        reader.readAsDataURL(file);
-      }
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    } else {
+      setFile(null);
     }
   };
 
-  const [isEmpty, setIsEmpty] = useState(true);
-  const handleInput = (event) => {
-    setPasteContent(event.target.innerText);
+  // Handle Upload image
+  const [loading, setIsLoading] = useState(false);
+  const handleUpload = async () => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "insta-payment"); // Replace with your upload preset
+
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/dgu9xnvxf/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+    if (data.secure_url) {
+      return data.secure_url;
+    } else {
+      toast.error("Upload failed.");
+    }
+    setIsLoading(false);
   };
+
   //=============================================================Return==============================================================//
   return (
     <>
@@ -149,38 +158,19 @@ const InstaPay = () => {
                   onInput={onInputHandler}
                   value={inputData.name}
                 />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  id="file-select"
+                />
 
                 <div
-                  contentEditable
-                  onPaste={handlePaste}
-                  onInput={handleInput}
-                  className="pasteArea"
-                  placeholder="Paste your screenshot here (Ctrl+V)"
-                  suppressContentEditableWarning={true}
+                  className="submit"
+                  onClick={loading ? null : submitHandler}
                 >
-                  {pasteContent.length === 0 && (
-                    <span className="placeholder">
-                      Paste your screenshot here.
-                    </span>
-                  )}
-                  {screenshot && (
-                    <img
-                      src={screenshot}
-                      alt="Screenshot"
-                      className="imagePreview"
-                    />
-                  )}
+                  {loading ? "loading.." : "submit Payment"}
                 </div>
-
-                <div className="submit" onClick={submitHandler}>
-                  submit Payment
-                </div>
-                {/* <input
-                className="submit"
-                // onKeyDown={enterKeyHandler}
-                type="submit"
-                value={"submit"}
-              /> */}
               </form>
             </div>
           </div>

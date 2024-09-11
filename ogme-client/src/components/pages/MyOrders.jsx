@@ -42,7 +42,7 @@ const MyOrders = () => {
   ) : UserOrders.length > 0 ? (
     <>
       <section className="my-orders-page">
-        {UserOrders?.toReversed().map((order, idx) => {
+        {UserOrders?.map((order, idx) => {
           const {
             _id,
             product_price: price,

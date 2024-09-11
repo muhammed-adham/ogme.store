@@ -582,7 +582,7 @@ const AdminProducts = () => {
             </thead>
 
             <tbody>
-              {productsState?.toReversed().map((prd, idx) => {
+              {productsState?.map((prd, idx) => {
                 const {
                   _id,
                   name,

@@ -69,6 +69,9 @@ const CardOrder = ({
           </div>
           <div className="expected-arrival info">
             <b style={{ textTransform: "capitalize" }}>Ogme {product}</b>{" "}
+
+          </div>
+          <div className="expected-arrival info" style={{width:"4rem"}}>
             <p>
               {quantity} {quantity == 1 ? "piece" : "pieces"}
             </p>

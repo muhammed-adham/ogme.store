@@ -72,7 +72,7 @@ const OnSale = () => {
                   </h2>
                 </>
               ) : onSaleProducts?.length > 0 ? (
-                onSaleProducts?.toReversed().map((prd, idx) => {
+                onSaleProducts?.map((prd, idx) => {
                   return (
                     <Card
                       key={idx}

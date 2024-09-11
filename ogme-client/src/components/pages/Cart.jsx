@@ -97,9 +97,9 @@ const Cart = () => {
   };
 
   //========================================================================================remove Item Handler
-  const removeItemHandler = (cardId, quantity) => {
+  const removeItemHandler = async (cardId, quantity) => {
     // console.log(CartProducts.filter(prev=>prev.id != "ed0f"));
-    removeProductCart(cardId);
+    await removeProductCart(cardId);
     setWishCount((prev) => prev - quantity);
     setCartProducts((prev) => prev.filter((item) => item._id != cardId));
   };

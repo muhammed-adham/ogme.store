@@ -130,7 +130,7 @@ const CategorySection = ({
                 paddingBlock: "1rem",
               }}
             >
-              {categryProducts?.toReversed().map((prd, idx) => {
+              {categryProducts?.map((prd, idx) => {
                 if (idx <= 4)
                   return (
                     <SwiperSlide style={{ flexShrink: "1" }} key={idx}>
