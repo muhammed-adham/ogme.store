@@ -145,6 +145,7 @@ const AdminOrders = () => {
                 <th>client info</th>
                 <th>product name</th>
                 <th>price</th>
+                <th>payment</th>
                 <th>amount</th>
                 <th>date</th>
                 <th>status</th>
@@ -162,6 +163,7 @@ const AdminOrders = () => {
                     quantity,
                     state,
                     created_at: date,
+                    payment
                   },
                   user: { fullName: userName, email, mobile },
                 } = data;
@@ -185,6 +187,7 @@ const AdminOrders = () => {
                       </td>
                       <td>{prdName}</td>
                       <td>{price}</td>
+                      <td>{payment}</td>
                       <td>{quantity}</td>
                       <td>{new Date(date).toDateString()}</td>
                       <td>

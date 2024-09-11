@@ -72,15 +72,19 @@ const InstaPay = () => {
     } else {
       await askUsEmail(data);
       await cartProducts.map((el) => {
+        const productWithPayment = {
+          ...el,
+          payment: 'instaPay', // Add the payment key
+        };
         removeProductCart(el._id);
-        postUserOrder(el);
+        postUserOrder(productWithPayment);
       });
-      toast.dismiss(loadingToastId); // Dismiss the loading toast
       toast.success("your order has been processed"),
-        setCartProducts(null),
-        setWishCount(0),
-        navigate("/account/orders");
+      setCartProducts(null),
+      setWishCount(0),
+      navigate("/account/orders");
     }
+    toast.dismiss(loadingToastId); // Dismiss the loading toast
   };
 
   const [file, setFile] = useState(null);
@@ -114,7 +118,7 @@ const InstaPay = () => {
     if (data.secure_url) {
       return data.secure_url;
     } else {
-      toast.error("Upload failed.");
+      // toast.error("Upload failed.");
     }
     setIsLoading(false);
   };
@@ -126,7 +130,7 @@ const InstaPay = () => {
         <div className="container">
           <div className="form-container">
             <div className="title">
-              <h2>Pay with InstaPay</h2>
+              <h2>Ogme.store@instapay</h2>
               <p>Enter your details and upload your InstaPay screenshot.</p>
             </div>
             <div className="form-group">

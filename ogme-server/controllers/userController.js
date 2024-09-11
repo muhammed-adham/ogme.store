@@ -84,8 +84,7 @@ module.exports.add = async (req, res, next) => {
 
         axios.defaults.baseURL = axiosURL(req.protocol, req.hostname);
         const emailVerifyURL = `mail/custom`;
-	console.log("hello");      
-	console.log(axiosURL(req.protocol, req.hostname));
+        // console.log(axiosURL(req.protocol, req.hostname));
         /** Sending Verification Email */
         await axios
           .post(
@@ -134,7 +133,6 @@ module.exports.add = async (req, res, next) => {
               status: 200,
               message: "Welcome " + req.user.fullName.toUpperCase(),
               user,
-              
             };
 
             const cart = await _all(User, {
@@ -517,7 +515,7 @@ module.exports.verify = async (req, res) => {
   try {
     const verifyToken = _JWTVerify(req.params.token);
     if (verifyToken) {
-      const user = await _update(User, req.params.id, { verified: true });      
+      const user = await _update(User, req.params.id, { verified: true });
       if (user) {
         r = {
           status: 200,

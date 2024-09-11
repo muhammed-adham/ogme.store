@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const WelcomeOnBoard = () => {
+  console.log('welecome');
+  
   const { id, token } = useParams();
   const navigate = useNavigate();
   const { mutate: verifyEmail } = useMutation(

@@ -51,6 +51,14 @@ const OrderSchema = new Schema({
     publish: { // Publish OR Hide Document
         type: Boolean,
         default: true
+    },
+    payment:{
+        type: String,
+        enum: {
+          values: ["cash", "instaPay"],
+          message: "Available roles are 'cash/instaPay",
+        },
+        default:"cash"
     }
 
 });
