@@ -47,8 +47,10 @@ const Footer = () => {
   };
 
   const submitMail = () => {
+    console.log('email');
+    
     if (
-      /^[a-zA-z0-9]{3,}@(gmail|yahoo|hotmail|outlook|icloud)\.com$/.test(
+      /^[a-zA-Z0-9_\-\.]{3,}@(gmail|yahoo|hotmail|outlook|icloud)\.(com|net|org|edu|gov)$/.test(
         inputData.email
       )
     ) {
@@ -66,7 +68,9 @@ const Footer = () => {
       );
       
 
-    } 
+    } else{
+      toast.error('Something went wrong!')
+    }
   };
   //==================================================================Return======================================================//
   return (
