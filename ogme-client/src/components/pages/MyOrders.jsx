@@ -68,7 +68,7 @@ const MyOrders = () => {
     <>
       <section
         className="empty-cart"
-        style={{ width: "100%", padding: "5rem" }}
+        style={{ width: "100%", padding: "5rem" , textAlign:'center'}}
       >
         <h2>Your order list is currently empty.</h2>
         <div className="shop-btn" onClick={() => (navigate("/"), scroll(0, 0))}>

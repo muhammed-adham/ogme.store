@@ -185,12 +185,13 @@ const AdminProducts = () => {
   //Update Handler
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const updateHandler = (idx) => {
+  const updateHandler = (id) => {
     setIsUpdating(true);
 
     scroll({ left: 0, top: 300, behavior: "smooth" });
 
-    const target = productsState[productsState?.length - idx - 1];
+    // Find the target product by matching the id
+    const target = productsState.find(product => product._id === id);
 
     getProductImages(target._id).then((res) => {
       const data = res?.data?.response?.data;
@@ -590,6 +591,7 @@ const AdminProducts = () => {
                   price,
                   _sale: { onSale, price: salePrice },
                 } = prd;
+
                 if (prd.name.includes(termState)) {
                   return (
                     <tr key={idx}>
@@ -601,7 +603,7 @@ const AdminProducts = () => {
                       <td>
                         <div
                           className="btn btn-update"
-                          onClick={() => updateHandler(idx)}
+                          onClick={() => updateHandler(_id)}
                         >
                           Update
                         </div>

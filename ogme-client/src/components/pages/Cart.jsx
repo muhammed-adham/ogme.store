@@ -126,7 +126,7 @@ const Cart = () => {
   };
 
   //=================================================================Return=========================================================//
-  return isLoading || cartProducts === undefined ? (
+  return isLoading ? (
     <>
       <h2 style={{ textAlign: "center", height: "12rem", marginTop: "4rem" }}>
         Loading...

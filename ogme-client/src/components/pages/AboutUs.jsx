@@ -104,7 +104,7 @@ const AboutUs = () => {
               designs adds a special elegance to your space.
               <br />
               <br />A Perfect Gift for a Friend or Loved one or treat yourself !
-              .For Her or for Him. Can be used as a bedroom ornament/lamp or a
+              For Her or for Him. Can be used as a bedroom ornament/lamp or a
               table centerpiece. Looks great on a windowsill.
             </p>
           </div>
