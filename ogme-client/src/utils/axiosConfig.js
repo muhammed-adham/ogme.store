@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const axiosConfig = axios.create({
-	// baseURL: "https://ogme.store/api",
-	baseURL: "http://localhost:8000/",
+	baseURL: "https://ogme.store/api",
+	// baseURL: "http://localhost:8000/",
   withCredentials: true,
 });
 export const request = ({ ...option }) => {
