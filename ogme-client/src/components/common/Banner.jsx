@@ -21,30 +21,62 @@ const Banner = ({ src, currentPage, isLoading }) => {
 
   //LowPowerMode AutoPlay on Safari 
   const videoRef = useRef(null);
-  const isLowPowerMode = async () => {
-    const battery = await navigator.getBattery();
-    return battery.level <= 0.2 && !battery.charging;
+
+  const playVideo = () => {
+    if (videoRef.current) {
+      videoRef.current.play().catch((error) => {
+        console.error('Autoplay failed:', error);
+      });
+    }
   };
+
+  // const isLowPowerMode = async () => {
+  //   const battery = await navigator.getBattery();
+  //   return battery.level <= 0.2 && !battery.charging;
+  // };
+
   useEffect(() => {
-    const handleAutoplay = async () => {
-      const isLow = await isLowPowerMode();
+    // Set initial attributes on mount
+    if (videoRef.current) {
+      videoRef.current.autoplay = true;
+      videoRef.current.muted = true;
+      videoRef.current.playsInline = true;
+      videoRef.current.loop = true;
+      videoRef.current.controls = false;
 
-      if (isLow) {
-        // Low power mode
-        videoRef.current.autoplay = true;
-        videoRef.current.muted = true;
-        videoRef.current.playsInline = true;
-        videoRef.current.loop = true;
-        videoRef.current.controls = false;
+      // Try to play the video on load
+      videoRef.current.addEventListener('canplaythrough', playVideo);
+    }
 
-        // Request user interaction to play the video
-        videoRef.current.addEventListener("canplaythrough", () => {
-          videoRef.current.play();
-        });
+    // Cleanup on unmount
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.removeEventListener('canplaythrough', playVideo);
       }
     };
-    handleAutoplay();
   }, []);
+  
+  // useEffect(() => {
+  //   const handleAutoplay = async () => {
+  //     const isLow = await isLowPowerMode();
+
+  //     if (isLow) {
+  //       // Low power mode
+  //       videoRef.current.autoplay = true;
+  //       videoRef.current.muted = true;
+  //       videoRef.current.playsInline = true;
+  //       videoRef.current.loop = true;
+  //       videoRef.current.controls = false;
+
+  //       // Request user interaction to play the video
+  //       videoRef.current.addEventListener("canplaythrough", () => {
+  //         videoRef.current.play();
+  //       });
+  //     }
+  //   };
+  //   handleAutoplay();
+  // }, []);
+  
   //==================================================================Return======================================================//
   return (
     <>
