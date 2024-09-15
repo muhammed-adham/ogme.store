@@ -59,6 +59,7 @@ const CardOrder = ({
     orderProgressHandler();
   }, []);
 
+  
   //==================================================================Return======================================================//
   return (
     <>
@@ -68,7 +69,7 @@ const CardOrder = ({
             <b>Order no.</b> <p>{orderNumber}</p>
           </div>
           <div className="expected-arrival info">
-            <b style={{ textTransform: "capitalize" }}>Ogme {product}</b>{" "}
+            <b style={{ textTransform: "capitalize", textAlign:'center' }}>Ogme {product}</b>{" "}
 
           </div>
           <div className="expected-arrival info" style={{width:"4rem"}}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { GetUserProfile } from "../../utils/axiosConfig";
 import { useNavigate } from "react-router-dom";

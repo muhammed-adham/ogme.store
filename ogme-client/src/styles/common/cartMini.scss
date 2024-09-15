@@ -39,7 +39,7 @@
     width: 8rem;
     height: 5rem;
     justify-content: space-between;
-    align-items: flex-start;
+    // align-items: flex-start;
     padding: .25rem ;
     // .loading{
     //   height: 1rem;
@@ -60,6 +60,7 @@
     }
   }
   .delete-btn {
+    padding-top: .5rem;
     opacity: .3;
     cursor: pointer;
     &:hover{

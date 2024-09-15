@@ -21,6 +21,7 @@ const Setting = () => {
     setUsereData(userProfile?.data?.data);
   }, [GetUserProfile]);
 
+  
   //========================================================================================Handle Form Submit
   const enterKeyHandler = (e) => {
     e.key === "Enter" ? submitHandler(e) : null;
@@ -49,7 +50,7 @@ const Setting = () => {
     fullName: "",
     // email: "",
     mobile: "",
-    // address: "",
+    address: "",
     // city: "",
     // bulding: "",
     // floor: "",
@@ -105,6 +106,26 @@ const Setting = () => {
                   id="mobile"
                   type="text"
                   placeholder="mobile Number"
+                />
+              </form>
+            </div>
+          </div>
+          <div className="profile info-container">
+            <div className="title">
+              <h2>address</h2>
+            </div>
+            <div className="form-container">
+              <form action="">
+                <input
+                  onInput={onInputHandler}
+                  value={UserData?.address ? UserData?.address:''}
+                  onKeyDown={enterKeyHandler}
+                  onChange={onChangeHandler}
+                  defaultValue={UserData?.address}
+                  name="address"
+                  id="address"
+                  type="text"
+                  placeholder="Address"
                 />
               </form>
             </div>

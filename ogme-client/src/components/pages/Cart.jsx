@@ -39,10 +39,12 @@ const Cart = () => {
 
   //========================================================================================handle data from axios
   const [cartProducts, setCartProducts] = useState();
+  const [userAddress, setUserAddress] = useState();
 
   const { isLoading } = useQuery("userProfile", GetUserProfile, {
     onSuccess: (data) => {
       setCartProducts(data?.data?.cart?.response?.data);
+      setUserAddress(data?.data?.data?.address);
     },
     refetchOnWindowFocus: false,
   });
@@ -108,13 +110,16 @@ const Cart = () => {
   // const { data: userData } = useQuery("userData", GetUserData);
   const [isChecked, setIsChecked] = useState("cash");
 
-  const checkoutHandler = () => {
+  const checkoutHandler = async() => {
     if (isChecked === "insta") {
       // console.log("insta");
       navigate("/instapay");
       
+    }else if(!userAddress){
+      toast.error('please provide your address')
+      navigate('/account/setting')
     } else {
-      cartProducts.map((el) => {
+     await cartProducts.map((el) => {
         removeProductCart(el._id);
         postUserOrder(el);
       });

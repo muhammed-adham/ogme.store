@@ -165,9 +165,10 @@ const AdminOrders = () => {
                     created_at: date,
                     payment
                   },
-                  user: { fullName: userName, email, mobile },
+                  user: { fullName: userName, email, mobile, address },
                 } = data;
 
+                
                 if (
                   mobile?.includes(termState) &&
                   (ordersStatus == "all" ||
@@ -184,6 +185,8 @@ const AdminOrders = () => {
                         {mobile}
                         <hr />
                         {email}
+                        <hr />
+                        {address}
                       </td>
                       <td>{prdName}</td>
                       <td>{price}</td>
