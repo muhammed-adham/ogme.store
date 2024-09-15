@@ -110,16 +110,15 @@ const Cart = () => {
   // const { data: userData } = useQuery("userData", GetUserData);
   const [isChecked, setIsChecked] = useState("cash");
 
-  const checkoutHandler = async() => {
-    if (isChecked === "insta") {
+  const checkoutHandler = async () => {
+    if (!userAddress) {
+      toast.error("please provide your address");
+      navigate("/account/setting");
+    } else if (isChecked === "insta") {
       // console.log("insta");
       navigate("/instapay");
-      
-    }else if(!userAddress){
-      toast.error('please provide your address')
-      navigate('/account/setting')
     } else {
-     await cartProducts.map((el) => {
+      await cartProducts.map((el) => {
         removeProductCart(el._id);
         postUserOrder(el);
       });
