@@ -32,6 +32,8 @@ import WelcomeOnBoard from "./components/pages/WelcomeOnBoard";
 import ResetOnBoard from "./components/pages/ResetOnBoard";
 import ResetPassword from "./components/pages/ResetPassword";
 import InstaPay from "./components/pages/InstaPay";
+import MetaPixel from "./context/MetaPixel";
+import PNF from "./components/pages/PNF";
 
 const App = () => {
   //Google Auth
@@ -53,8 +55,8 @@ const App = () => {
         { path: "/shop/bottles", element: <Bottles /> },
         { path: "/shop/glassware", element: <Glassware /> },
         { path: "/shop/suncatcher", element: <Suncatcher /> },
-        { path: "/shop/:cat/:id", element: <SingleProduct /> },
-        { path: "/shop/:id", element: <SingleProduct /> },
+        { path: "/shop/:cat/:prdName", element: <SingleProduct /> },
+        { path: "/shop/:prdName", element: <SingleProduct /> },
         { path: "/sale", element: <OnSale /> },
         { path: "/about", element: <AboutUs /> },
         { path: "/policy", element: <Policy /> },
@@ -88,6 +90,7 @@ const App = () => {
     { path: "/welcome/:id/:token", element: <WelcomeOnBoard /> },
     { path: "/reset-password/:id/:token", element: <ResetOnBoard /> },
     { path: "/reset-password", element: <ResetPassword /> },
+    { path: "*", element: <PNF /> }
   ]);
 
   return (
@@ -103,6 +106,7 @@ const App = () => {
           },
         }}
       />
+      <MetaPixel />
       <QueryClientProvider client={client}>
         <GoogleOAuthProvider clientId={clientId}>
           <RouterProvider router={Router} />

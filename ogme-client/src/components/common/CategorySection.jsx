@@ -143,9 +143,10 @@ const CategorySection = ({
                         price={prd._sale.onSale ? prd._sale.price : prd.price}
                         oldPrice={prd._sale.onSale ? prd.price : null}
                         productImage={prd.featureImage}
+                        sold={prd.sold}
                         onClick={() => {
                           navigate(
-                            `/shop/${prd.category.split(" ")[1]}/${prd._id}`
+                            `/shop/${prd.category.split(" ")[1]}/${prd.name.split(' ').join('-')}`,{state:{data:prd._id}}
                           ),
                             scroll(0, 0);
                         }}

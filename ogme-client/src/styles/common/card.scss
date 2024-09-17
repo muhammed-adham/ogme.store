@@ -34,10 +34,17 @@
     .price{
         span{
             display: flex;
-            gap: .5rem;
             del{
                 color: $danger;
             }
         }
+    }
+    .sold-out{
+        // background-color: red;
+        // color: white;
+        color: red;
+        font-weight: 900;
+        padding: .25rem;
+        text-transform: uppercase;
     }
 }

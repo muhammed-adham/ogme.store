@@ -20,12 +20,13 @@ const AdminProducts = () => {
   //Query Filters
   const [categoryState, setCategoryState] = useState(null);
   const [isOnSale, setIsOnSale] = useState(null);
+  const [isSold, setIsSold] = useState(null);
   const [termState, setTermState] = useState("");
 
   //Fetch Data
   const { refetch, isLoading } = useQuery(
-    ["ogmeDrive", categoryState, isOnSale],
-    () => getCategoryProducts(categoryState, "", "", isOnSale),
+    ["ogmeDrive", categoryState, isOnSale, isSold],
+    () => getCategoryProducts(categoryState, "", "", isOnSale, isSold),
     {
       onSuccess: (data) => {
         setProductsState(data?.data?.response?.data);
@@ -205,6 +206,7 @@ const AdminProducts = () => {
         price: target.price,
         onSale: target._sale.onSale,
         salePrice: target._sale.price,
+        sold:target.sold,
 
         productImages: Array.from({ length: 9 }, (_, index) => ({
           [`productImage_${index}`]: data[index]?.fullPath || "",
@@ -227,6 +229,7 @@ const AdminProducts = () => {
       onSale,
       salePrice,
       productImages,
+      sold
     } = inputState;
 
     const data = {
@@ -236,6 +239,7 @@ const AdminProducts = () => {
       featureImage,
       price,
       _sale: { onSale, price: salePrice },
+      sold
     };
 
     updateProduct(id, data).then((res) => {
@@ -279,6 +283,7 @@ const AdminProducts = () => {
           featureImage: "",
           price: 0,
           onSale: false,
+          sold:false,
           salePrice: 0,
           productImages: Array(9).fill({}), // Reset productImages to an array of empty objects
         });
@@ -360,6 +365,11 @@ const AdminProducts = () => {
     setIsOnSale(e.target.value);
   };
 
+  //Find Sold out
+  const soldHandler = (e) => {
+    setIsSold(e.target.value);
+  };
+
   //Search By Name
   const searchHandler = (e) => {
     setTermState(e.target.value);
@@ -432,6 +442,19 @@ const AdminProducts = () => {
               >
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>sold out</label>
+              <select
+                name="sold"
+                id="sold"
+                onInput={inputHandler}
+                value={inputState?.sold}
+              >
+                <option value={false}>available</option>
+                <option value={true}>sold out</option>
               </select>
             </div>
 
@@ -550,6 +573,21 @@ const AdminProducts = () => {
               <option value={false}>Inactive</option>
             </select>
           </div>
+          <div className="form-group" style={{ width: "100%" }}>
+            <select
+              defaultValue={""}
+              name="sold-search"
+              id="sold-search"
+              onInput={soldHandler}
+            >
+              <option value="" disabled>
+                Find sold out...
+              </option>
+              <option value="">All</option>
+              <option value={false}>available</option>
+              <option value={true}>sold out</option>
+            </select>
+          </div>
 
           <input
             type="text"
@@ -577,6 +615,7 @@ const AdminProducts = () => {
                 <th>Category</th>
                 <th>Price</th>
                 <th>Sale</th>
+                <th>Sold Out</th>
                 <th>Update</th>
                 <th>Delete</th>
               </tr>
@@ -590,6 +629,7 @@ const AdminProducts = () => {
                   category,
                   price,
                   _sale: { onSale, price: salePrice },
+                  sold,
                 } = prd;
 
                 if (prd.name.includes(termState)) {
@@ -600,6 +640,7 @@ const AdminProducts = () => {
                       <td>{category.split(" ")[1]}</td>
                       <td>{onSale ? salePrice : price}</td>
                       <td>{onSale ? <b>Active</b> : "Inactive"}</td>
+                      <td>{sold ? <b>Sold Out</b> : "Available"}</td>
                       <td>
                         <div
                           className="btn btn-update"

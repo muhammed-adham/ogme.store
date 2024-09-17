@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const axiosConfig = axios.create({
-	baseURL: "https://ogme.store/api",
-	// baseURL: "http://localhost:8000/",
+  baseURL: "https://ogme.store/api",
+  // baseURL: "http://localhost:8000/",
   withCredentials: true,
 });
 export const request = ({ ...option }) => {
@@ -21,18 +21,21 @@ export const getCategoryProducts = async (
   category,
   limit,
   skipState,
-  onSale
+  onSale,
+  sold
 ) => {
   return await request({
     url: `/product?_s=${skipState}&_l=${limit}${
       category ? `&category=Ogme ${category}` : ""
-    }${onSale ? `&_sale.onSale=${onSale}` : ""}`,
+    }${onSale ? `&_sale.onSale=${onSale}` : ""}
+    ${sold ? `&sold=${sold}` : ""}
+    `,
   });
 };
 
 //Get Single Product
 export const getSingleProduct = async (id) => {
-  return await request({ url: `/product?_id=${id}` });
+  return await request({ url: `/product?name=${id}` });
 };
 
 //Get All Products => Admin Panel
@@ -66,13 +69,13 @@ export const addProductImages = async (data) => {
   return await request({ url: `file`, method: "post", data });
 };
 
-//Get FeatureImage 
+//Get FeatureImage
 export const getFeatureImage = async (name) => {
   return await request({ url: `file?itemName=${name}` });
 };
 
 //Update Product Image
-export const updateProductImages = async (id,data) => {
+export const updateProductImages = async (id, data) => {
   return await request({ url: `file/${id}`, method: "post", data });
 };
 

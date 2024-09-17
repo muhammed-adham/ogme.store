@@ -189,7 +189,7 @@ const AdminOrders = () => {
                         {address}
                       </td>
                       <td>{prdName}</td>
-                      <td>{price}</td>
+                      <td>{price*quantity}</td>
                       <td>{payment}</td>
                       <td>{quantity}</td>
                       <td>{new Date(date).toDateString()}</td>

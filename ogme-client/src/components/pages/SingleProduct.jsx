@@ -40,7 +40,11 @@ const SingleProduct = () => {
   const [coverIdx, setCoverIdx] = useState(0);
 
   //========================================================================================Params
-  let { id } = useParams();
+  let { prdName } = useParams();
+  prdName = prdName?.split("-").join(" ");
+
+  const [ID, setID] = useState();
+
   const [quantity, setQuantity] = useState(1);
 
   //========================================================================================Fetch  Data
@@ -56,13 +60,12 @@ const SingleProduct = () => {
     data: singleProductData,
     isSuccess: successSingleProductData,
     isLoading: loadingSingleProductData,
-  } = useQuery(["singleProduct", id], () => getSingleProduct(id), {
+  } = useQuery(["singleProduct", prdName], () => getSingleProduct(prdName), {
     onSuccess: (data) => {
       setProductState(data?.data?.response?.data[0]);
+      setID(data?.data?.response?.data[0]?._id);
     },
   });
-  // console.log(productState?.category.split(" ")[1]);
-  // console.log(id);
 
   //allProducts to generate random cards
   const { data: allProducts, refetch: allProductRefetch } = useQuery(
@@ -96,15 +99,15 @@ const SingleProduct = () => {
 
   //Cover Images
   const { data: coverImages, refetch: coverImagesRefetch } = useQuery(
-    ["coverImages", id],
-    () => getProductImages(id),
+    ["coverImages", ID],
+    () => getProductImages(ID),
     {
       onSuccess: (data) => {
         setCoverImagesState(data?.data?.response?.data);
       },
     }
   );
-  
+
   //========================================================================================State Data
   //adjust data for the post cart api
   const [cartDataState, setCartDataState] = useState();
@@ -133,7 +136,7 @@ const SingleProduct = () => {
   //========================================================================================OnClickHandler for May also like
   const onClickHandler = (rIdx) => {
     setProductState(allProducts?.data?.response?.data[rIdx]);
-    id = null; //Prevent Delay
+    setID(null); //Prevent Delay
     allProductRefetch();
     coverImagesRefetch();
     setCoverIdx(0);
@@ -144,7 +147,7 @@ const SingleProduct = () => {
     const idxs = [];
     while (idxs.length < count) {
       const randomIdx = Math.floor(Math.random() * max);
-      if (!idxs.includes(randomIdx) && randomIdx !== id) {
+      if (!idxs.includes(randomIdx) && randomIdx !== ID) {
         idxs.push(randomIdx);
       }
     }
@@ -169,35 +172,47 @@ const SingleProduct = () => {
   };
   //========================================================================================handle AddToCart Button
   const addToCartHandler = () => {
-    postProductToCart(cartDataState).then((res) => {
-      if (res?.data?.status === 200) {
-        setWishCount((prev) => prev + quantity),
-          toast.success("added successfuly");
-      } else {
-        toast("Please log in first.", {
-          icon: "⛔️",
-        });
-        navigate("/login");
-        scroll(0, 0);
-      }
-    });
+    if (productState.sold) {
+      toast.error("sold out!");
+      navigate("/ask");
+      scroll(0, 0);
+    } else {
+      postProductToCart(cartDataState).then((res) => {
+        if (res?.data?.status === 200) {
+          setWishCount((prev) => prev + quantity),
+            toast.success("added successfuly");
+        } else {
+          toast("Please log in first.", {
+            icon: "⛔️",
+          });
+          navigate("/login");
+          scroll(0, 0);
+        }
+      });
+    }
   };
 
   const buyNowHandler = () => {
-    postProductToCart(cartDataState).then((res) => {
-      if (res?.data?.status === 200) {
-        setWishCount((prev) => prev + quantity),
-          toast.success("added successfuly"),
-          navigate("/cartlist"),
+    if (productState.sold) {
+      toast.error("sold out!");
+      navigate("/ask");
+      scroll(0, 0);
+    } else {
+      postProductToCart(cartDataState).then((res) => {
+        if (res?.data?.status === 200) {
+          setWishCount((prev) => prev + quantity),
+            toast.success("added successfuly"),
+            navigate("/cartlist"),
+            scroll(0, 0);
+        } else {
+          toast("Please log in first.", {
+            icon: "⛔️",
+          });
+          navigate("/login");
           scroll(0, 0);
-      } else {
-        toast("Please log in first.", {
-          icon: "⛔️",
-        });
-        navigate("/login");
-        scroll(0, 0);
-      }
-    });
+        }
+      });
+    }
   };
   //========================================================================================Quantity Handler
 
@@ -265,17 +280,22 @@ const SingleProduct = () => {
             <div className="main-content-container">
               <div className="main-content">
                 <h2>{productState?.name}</h2>
+                {productState?.price ? (
+                  <div className="price">
+                    {productState?._sale?.onSale ? (
+                      <>
+                        <del>{`EGP ${productState?.price}`}</del>
+                        <b>{`EGP ${productState?._sale.price}`}</b>
+                      </>
+                    ) : (
+                      <b>{`EGP ${productState?.price}`}</b>
+                    )}
+                  </div>
+                ) : null}
 
-                <div className="price">
-                  {productState?._sale?.onSale ? (
-                    <>
-                      <del>{`EGP ${productState?.price}`}</del>
-                      <b>{`EGP ${productState?._sale.price}`}</b>
-                    </>
-                  ) : (
-                    <b>{`EGP ${productState?.price}`}</b>
-                  )}
-                </div>
+                {productState?.sold ? (
+                  <div className="sold-out">sold out!</div>
+                ) : null}
               </div>
               <div className="actions-container">
                 <div className="top-widget">
@@ -346,16 +366,28 @@ const SingleProduct = () => {
                     return null;
                   }
 
-                  const { featureImage, name, price, _sale, category, _id } =
-                    product;
+                  const {
+                    featureImage,
+                    name,
+                    price,
+                    _sale,
+                    category,
+                    _id,
+                    sold,
+                  } = product;
 
                   const discountedPrice =
                     _sale.onSale == true ? _sale.onSale.price : price;
 
                   const handleClick = () => {
                     setQuantity(1);
-                    navigate(`/shop/${category.split(" ")[1]}/${_id}`);
-                    scroll(0, 0);
+                    navigate(
+                      `/shop/${category.split(" ")[1]}/${name
+                        .split(" ")
+                        .join("-")}`,
+                      { state: { data: _id } }
+                    ),
+                      scroll(0, 0);
                     onClickHandler(rIdx);
                   };
 
@@ -366,6 +398,7 @@ const SingleProduct = () => {
                       productName={name}
                       price={_sale.onSale ? _sale.price : price}
                       oldPrice={_sale.onSale ? price : null}
+                      sold={sold}
                       onClick={handleClick}
                     />
                   ) : (
@@ -376,6 +409,7 @@ const SingleProduct = () => {
                       productName={name}
                       price={_sale.onSale ? _sale.price : price}
                       oldPrice={_sale.onSale ? price : null}
+                      sold={sold}
                       onClick={handleClick}
                     />
                   );

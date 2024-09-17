@@ -2,6 +2,11 @@
 <head>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer"
   />
+  <script>
+    document.getElementsByTagName('img').addEventListener('click', function(e) {
+    e.preventDefault();
+});
+  </script>
   <style>
     * {
       margin: 0;
@@ -33,7 +38,6 @@
       >
         <div class="logo" style="width: 100px;">
           <img
-            onclick="(e) => e.preventDefault()"
             src="https://res.cloudinary.com/dgu9xnvxf/image/upload/v1722528365/logo_o6astf.png"
             alt="Ogme Store"
             style="width: 100%; object-fit: contain; cursor: none;"
@@ -52,7 +56,6 @@
         ">
         <div class="icon" style="width: 60px; margin:10px auto ;">
           <img
-           onclick="(e) => e.preventDefault()"
            src="https://res.cloudinary.com/dgu9xnvxf/image/upload/v1722528380/check_z0petj.png" alt="Checked" 
            style="width: 100% ;cursor:none; object-fit: contain;"/>
         </div>
@@ -88,5 +91,6 @@
       </div>
     </div>
   </div>
+
 </body>
 </html>

@@ -19,21 +19,14 @@ const Banner = ({ src, currentPage, isLoading }) => {
     setIsVideo(videoPattern.test(src));
   }, [src]);
 
-  //LowPowerMode AutoPlay on Safari 
+  //LowPowerMode AutoPlay on Safari
   const videoRef = useRef(null);
 
-  const playVideo = () => {
+  const handlePlay = () => {
     if (videoRef.current) {
-      videoRef.current.play().catch((error) => {
-        console.error('Autoplay failed:', error);
-      });
+      videoRef.current.play();
     }
   };
-
-  // const isLowPowerMode = async () => {
-  //   const battery = await navigator.getBattery();
-  //   return battery.level <= 0.2 && !battery.charging;
-  // };
 
   useEffect(() => {
     // Set initial attributes on mount
@@ -45,17 +38,17 @@ const Banner = ({ src, currentPage, isLoading }) => {
       videoRef.current.controls = false;
 
       // Try to play the video on load
-      videoRef.current.addEventListener('canplaythrough', playVideo);
+      videoRef.current.addEventListener("canplaythrough", handlePlay);
     }
 
     // Cleanup on unmount
     return () => {
       if (videoRef.current) {
-        videoRef.current.removeEventListener('canplaythrough', playVideo);
+        videoRef.current.removeEventListener("canplaythrough", handlePlay);
       }
     };
   }, []);
-  
+
   // useEffect(() => {
   //   const handleAutoplay = async () => {
   //     const isLow = await isLowPowerMode();
@@ -76,7 +69,7 @@ const Banner = ({ src, currentPage, isLoading }) => {
   //   };
   //   handleAutoplay();
   // }, []);
-  
+
   //==================================================================Return======================================================//
   return (
     <>
@@ -103,6 +96,7 @@ const Banner = ({ src, currentPage, isLoading }) => {
             loop={true}
             controls={false}
             ref={videoRef}
+            onClick={handlePlay}
           ></video>
         ) : (
           <img src={src} alt="Banner Image" />

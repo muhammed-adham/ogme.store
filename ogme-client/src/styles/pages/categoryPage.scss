@@ -14,9 +14,9 @@
       .cards {
         display: flex;
         flex-wrap: wrap;
-        // justify-content: space-between
-        column-gap: 3.3rem;
+        column-gap: 1.8rem;
         row-gap: 4.25rem;
+        justify-content: center
       }
     }
   }

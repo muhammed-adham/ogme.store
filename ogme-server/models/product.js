@@ -4,59 +4,74 @@
  *      - Object name which consists of two words {EX: created_at} is split with underscore ( _ ).
  * */
 
-const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 const ProductSchema = new Schema({
-    name: { // Product name
-        type: String,
-        required: true,
-        trim: true,
+  name: {
+    // Product name
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  category: {
+    // Product Category such as ['Ogme Drive', 'Ogme Bottles', 'Oqme Glassware', 'Ogme Sun Catcher', etc...]
+    type: String,
+    required: true,
+  },
+  price: {
+    // Product price
+    type: Number,
+    required: true,
+  },
+  _sale: {
+    // _sale object contains { onSale for true or false sale, and price if true onSale }
+    onSale: {
+      type: Boolean,
+      default: false,
     },
-    category: { // Product Category such as ['Ogme Drive', 'Ogme Bottles', 'Oqme Glassware', 'Ogme Sun Catcher', etc...]
-        type: String,
-        required: true,
+    price: {
+      type: Number,
+      default: 0,
     },
-    price: { // Product price
-        type: Number,
-        required: true,
-    },
-    _sale: { // _sale object contains { onSale for true or false sale, and price if true onSale }
-        onSale: {
-            type: Boolean,
-            default: false,
-        },
-        price: {
-            type: Number,
-            default: 0,
-        },
-    },
-    brief: { // A short about the product story, to fill in product cards
-        type: String,
-        trim: true,
-    },
-    story: { // Full product story
-        type: String,
-        trim: true,
-    },
-    featureImage: { // Link for Feature Image
-        type: String,
-    },
-/*    reviews: {
+  },
+  brief: {
+    // A short about the product story, to fill in product cards
+    type: String,
+    trim: true,
+  },
+  story: {
+    // Full product story
+    type: String,
+    trim: true,
+  },
+  featureImage: {
+    // Link for Feature Image
+    type: String,
+  },
+  /*    reviews: {
         type: Array,
     },*/
-    created_at: { // Date in which the document is created
-        type: Date,
-        default: Date.now
-    },
-    deleted_at: { // Date in which the document is trashed
-        type: Date,
-        default: null
-    },
-    publish: { // Publish OR Hide Document
-        type: Boolean,
-        default: true
-    }
+  created_at: {
+    // Date in which the document is created
+    type: Date,
+    default: Date.now,
+  },
+  deleted_at: {
+    // Date in which the document is trashed
+    type: Date,
+    default: null,
+  },
+  publish: {
+    // Publish OR Hide Document
+    type: Boolean,
+    default: true,
+  },
+  sold: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-module.exports = mongoose.model('Product', ProductSchema);
+module.exports = mongoose.model("Product", ProductSchema);

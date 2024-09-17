@@ -9,16 +9,7 @@ import CardXs from "../common/CardXs";
 
 /** === Drive Category Page ===
  *
- * This component represents a category page.
- *
- * Layout:
- * - <Banner>: The customize banner component for the category page.
- * - .category-Page: The main container for the category page.
- *   - .container: The container for the page contents.
- *     - .title: The paragraph element for the page title.
- *     - .cards-container: The container for the cards displaying product information.
- *       - .cards: The container for individual product cards.
- *         - <Card>: The customize component representing a product card.
+ * This component represents drive category page.
  *
  */
 const Drive = () => {
@@ -115,9 +106,13 @@ const Drive = () => {
                     price={prd._sale.onSale ? prd._sale.price : prd.price}
                     oldPrice={prd._sale.onSale ? prd.price : null}
                     productImage={prd.featureImage}
+                    sold={prd.sold}
                     onClick={() => {
                       navigate(
-                        `/shop/${prd.category.split(" ")[1]}/${prd._id}`
+                        `/shop/${prd.category.split(" ")[1]}/${prd.name
+                          .split(" ")
+                          .join("-")}`,
+                        { state: { data: prd._id } }
                       ),
                         scroll(0, 0);
                     }}
@@ -131,9 +126,13 @@ const Drive = () => {
                     price={prd._sale.onSale ? prd._sale.price : prd.price}
                     oldPrice={prd._sale.onSale ? prd.price : null}
                     productImage={prd.featureImage}
+                    sold={prd.sold}
                     onClick={() => {
                       navigate(
-                        `/shop/${prd.category.split(" ")[1]}/${prd._id}`
+                        `/shop/${prd.category.split(" ")[1]}/${prd.name
+                          .split(" ")
+                          .join("-")}`,
+                        { state: { data: prd._id } }
                       ),
                         scroll(0, 0);
                     }}

@@ -41,7 +41,7 @@ const Cart = () => {
   const [cartProducts, setCartProducts] = useState();
   const [userAddress, setUserAddress] = useState();
 
-  const { isLoading } = useQuery("userProfile", GetUserProfile, {
+  const { isLoading, isFetching } = useQuery("userProfile", GetUserProfile, {
     onSuccess: (data) => {
       setCartProducts(data?.data?.cart?.response?.data);
       setUserAddress(data?.data?.data?.address);
@@ -101,9 +101,11 @@ const Cart = () => {
   //========================================================================================remove Item Handler
   const removeItemHandler = async (cardId, quantity) => {
     // console.log(CartProducts.filter(prev=>prev.id != "ed0f"));
+    const toastLoading= toast.loading('deleting..')
     await removeProductCart(cardId);
     setWishCount((prev) => prev - quantity);
     setCartProducts((prev) => prev.filter((item) => item._id != cardId));
+    toast.dismiss(toastLoading)
   };
 
   //========================================================================================CheckOut Handler
@@ -130,7 +132,7 @@ const Cart = () => {
   };
 
   //=================================================================Return=========================================================//
-  return isLoading ? (
+  return  isFetching ? (
     <>
       <h2 style={{ textAlign: "center", height: "12rem", marginTop: "4rem" }}>
         Loading...

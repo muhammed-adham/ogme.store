@@ -13,6 +13,7 @@ import { getBanner } from "../../utils/axiosConfig";
  *
  */
 const Home = () => {
+  
   const [homeBanner, setHomeBanner] = useState();
 
   const { isLoading, isFetching } = useQuery("getBanner", getBanner, {

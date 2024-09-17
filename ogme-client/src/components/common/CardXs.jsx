@@ -16,6 +16,7 @@ const CardXs = ({
   productImage,
   onClick,
   isDragging,
+  sold
 }) => {
   //========================================================================================States
   const [hovered, setHovered] = useState(false); //Mouse Hovering Over Card Image
@@ -85,6 +86,8 @@ const CardXs = ({
               EGP {price}
             </span>
           </div>
+          {sold ? <div className="sold-out">sold out!</div> : null}
+
         </div>
       </div>
     </>
