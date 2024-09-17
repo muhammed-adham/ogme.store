@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import DialogAddress from "../common/DialogAddress";
 import { BsCash } from "react-icons/bs";
+import FacebookPixel from 'react-facebook-pixel';
 
 /**
  *  * === CartPage ===
@@ -40,11 +41,13 @@ const Cart = () => {
   //========================================================================================handle data from axios
   const [cartProducts, setCartProducts] = useState();
   const [userAddress, setUserAddress] = useState();
+  const [initialFetch, setInitialFetch] = useState(true);
 
   const { isLoading, isFetching } = useQuery("userProfile", GetUserProfile, {
     onSuccess: (data) => {
       setCartProducts(data?.data?.cart?.response?.data);
       setUserAddress(data?.data?.data?.address);
+      setInitialFetch(false);
     },
     refetchOnWindowFocus: false,
   });
@@ -64,24 +67,28 @@ const Cart = () => {
 
   //========================================================================================Quantity Handler
   const plusBtn = async (e, data) => {
-    e.target.nextElementSibling.textContent = "...";
+    e.target.nextElementSibling.textContent = "";
+    e.target.nextElementSibling.classList.add('loading-dots');
     const update = { ...data, quantity: data.quantity + 1 };
     await updateCartProduct(update);
     setWishCount((prev) => prev + 1);
     setCartProducts((prev) =>
       prev.map((prd) => (prd._id === data._id ? update : prd))
     );
+    e.target.nextElementSibling.classList.remove('loading-dots')
   };
 
   const minusBtn = async (e, data) => {
     if (data.quantity > 1) {
-      e.target.previousElementSibling.textContent = "...";
+      e.target.previousElementSibling.textContent = "";
+      e.target.previousElementSibling.classList.add('loading-dots');
       const update = { ...data, quantity: data.quantity - 1 };
       await updateCartProduct(update);
       setWishCount((prev) => prev - 1);
       setCartProducts((prev) =>
         prev.map((prd) => (prd._id === data._id ? update : prd))
       );
+      e.target.previousElementSibling.classList.remove('loading-dots')
     }
   };
 
@@ -98,14 +105,16 @@ const Cart = () => {
     return totalPrice;
   };
 
+  
+
   //========================================================================================remove Item Handler
   const removeItemHandler = async (cardId, quantity) => {
     // console.log(CartProducts.filter(prev=>prev.id != "ed0f"));
-    const toastLoading= toast.loading('deleting..')
+    const toastLoading = toast.loading("deleting..");
     await removeProductCart(cardId);
     setWishCount((prev) => prev - quantity);
     setCartProducts((prev) => prev.filter((item) => item._id != cardId));
-    toast.dismiss(toastLoading)
+    toast.dismiss(toastLoading);
   };
 
   //========================================================================================CheckOut Handler
@@ -120,6 +129,16 @@ const Cart = () => {
       // console.log("insta");
       navigate("/instapay");
     } else {
+      
+      // Track purchase event with Meta Pixel
+      FacebookPixel.track("Purchase", {
+        value: calculateTotalPrice(), // calculation to get total cart value
+        currency: "EGP", // currency
+        content_ids: cartProducts.map((el) => el._id), // Product IDs from cart
+        content_type: "product",
+        
+      });
+
       await cartProducts.map((el) => {
         removeProductCart(el._id);
         postUserOrder(el);
@@ -132,7 +151,7 @@ const Cart = () => {
   };
 
   //=================================================================Return=========================================================//
-  return  isFetching ? (
+  return initialFetch ? (
     <>
       <h2 style={{ textAlign: "center", height: "12rem", marginTop: "4rem" }}>
         Loading...
