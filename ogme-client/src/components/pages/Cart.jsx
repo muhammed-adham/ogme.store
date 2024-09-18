@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import DialogAddress from "../common/DialogAddress";
 import { BsCash } from "react-icons/bs";
-import Confetti from "react-confetti";
 import ConfettiExplosion from "react-confetti-explosion";
 
 /**
