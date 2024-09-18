@@ -14,7 +14,8 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import DialogAddress from "../common/DialogAddress";
 import { BsCash } from "react-icons/bs";
-import FacebookPixel from 'react-facebook-pixel';
+import Confetti from "react-confetti";
+import ConfettiExplosion from "react-confetti-explosion";
 
 /**
  *  * === CartPage ===
@@ -23,6 +24,7 @@ import FacebookPixel from 'react-facebook-pixel';
  *
  */
 const Cart = () => {
+  const [isExploding, setIsExploding] = React.useState(false);
   //========================================================================================Dialog
   const [dialog, setDialog] = useState(false);
   const Close = (e) => {
@@ -68,27 +70,27 @@ const Cart = () => {
   //========================================================================================Quantity Handler
   const plusBtn = async (e, data) => {
     e.target.nextElementSibling.textContent = "";
-    e.target.nextElementSibling.classList.add('loading-dots');
+    e.target.nextElementSibling.classList.add("loading-dots");
     const update = { ...data, quantity: data.quantity + 1 };
     await updateCartProduct(update);
     setWishCount((prev) => prev + 1);
     setCartProducts((prev) =>
       prev.map((prd) => (prd._id === data._id ? update : prd))
     );
-    e.target.nextElementSibling.classList.remove('loading-dots')
+    e.target.nextElementSibling.classList.remove("loading-dots");
   };
 
   const minusBtn = async (e, data) => {
     if (data.quantity > 1) {
       e.target.previousElementSibling.textContent = "";
-      e.target.previousElementSibling.classList.add('loading-dots');
+      e.target.previousElementSibling.classList.add("loading-dots");
       const update = { ...data, quantity: data.quantity - 1 };
       await updateCartProduct(update);
       setWishCount((prev) => prev - 1);
       setCartProducts((prev) =>
         prev.map((prd) => (prd._id === data._id ? update : prd))
       );
-      e.target.previousElementSibling.classList.remove('loading-dots')
+      e.target.previousElementSibling.classList.remove("loading-dots");
     }
   };
 
@@ -104,8 +106,6 @@ const Cart = () => {
     });
     return totalPrice;
   };
-
-  
 
   //========================================================================================remove Item Handler
   const removeItemHandler = async (cardId, quantity) => {
@@ -129,14 +129,18 @@ const Cart = () => {
       // console.log("insta");
       navigate("/instapay");
     } else {
-      
-      // Track purchase event with Meta Pixel
-      FacebookPixel.track("Purchase", {
-        value: calculateTotalPrice(), // calculation to get total cart value
-        currency: "EGP", // currency
-        content_ids: cartProducts.map((el) => el._id), // Product IDs from cart
-        content_type: "product",
-        
+      setIsExploding(true);
+      // Track the checkout event with Meta Pixel
+      await fbq("track", "Purchase", {
+        content_type: cartProducts.map((el) => el.category),
+        content_ids: cartProducts.map((el) => el._id),
+        // Assuming each product has a price
+        total: cartProducts.reduce(
+          (total, el) => total + el.product_price * el.quantity,
+          0
+        ),
+        quantity: cartProducts.reduce((total, el) => total + el.quantity, 0), // Assuming each product has a quantity
+        method:'cash'
       });
 
       await cartProducts.map((el) => {
@@ -145,122 +149,156 @@ const Cart = () => {
       });
       toast.success("your order has been processed"),
         setCartProducts(null),
-        setWishCount(0),
+        setWishCount(0);
+      // Delay navigation to allow confetti to show
+      setTimeout(() => {
         navigate("/account/orders");
+      }, 2000); // Adjust the time as necessary
     }
   };
 
   //=================================================================Return=========================================================//
-  return initialFetch ? (
+  return (
     <>
-      <h2 style={{ textAlign: "center", height: "12rem", marginTop: "4rem" }}>
-        Loading...
-      </h2>
-    </>
-  ) : cartProducts?.length > 0 ? (
-    <>
-      <section className="cart-page">
-        <div className="container">
-          <div className="card-list-container">
-            <p>You have {wishCount ? wishCount : 0} items in your cart</p>
-            <div className="cards-container">
-              <div className="cards">
-                {cartProducts.map((card, idx) => {
-                  const {
-                    featureImage,
-                    product_name,
-                    product_price,
-                    _sale,
-                    _id,
-                    quantity,
-                    category,
-                  } = card;
-
-                  const activePrice = _sale.onSale
-                    ? _sale.onSale.price * quantity
-                    : product_price * quantity;
-
-                  return (
-                    <CardMini
-                      key={idx}
-                      onClick={() => {
-                        navigate(`/shop/${_id}`), scroll(0, 0);
-                      }}
-                      productImageSrc={featureImage}
-                      productCategory={category}
-                      productName={product_name}
-                      price={activePrice}
-                      oldPrice={_sale.onSale ? product_price * quantity : null}
-                      removeItem={() => {
-                        removeItemHandler(_id, quantity);
-                      }}
-                      quantity={quantity}
-                      plusBtn={(e) => plusBtn(e, card)}
-                      minusBtn={(e) => minusBtn(e, card)}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-          <div className="card-details-container">
-            <h2>Payment Summary</h2>
-            <div className="pay-methods-container">
-              <b>Pay With</b>
-              <div className="methods">
-                <label
-                  className="method-container"
-                  // onClick={() => toast.error("not yet available")}
-                >
-                  <MdMobileFriendly />
-                  Insta Pay
-                  <input
-                    type="radio"
-                    name="paymethod"
-                    onChange={() => setIsChecked("insta")}
-                  />
-                  <span className="check-mark"></span>
-                </label>
-                <label className="method-container">
-                  {/* <IoCashOutline /> */}
-                  <BsCash />
-                  Cash On Deliver
-                  <input
-                    type="radio"
-                    name="paymethod"
-                    defaultChecked
-                    onChange={() => setIsChecked("cash")}
-                  />
-                  <span className="check-mark"></span>
-                </label>
-              </div>
-            </div>
-            <div className="pay-receipt-container">
-              <div className="delivery-fee receipt-group">
-                <p>Delivery Fee</p>
-                <p>{deleviryFee}</p>
-              </div>
-              <div className="total receipt-group">
-                <p>Total</p>
-                <b>EGP {calculateTotalPrice()}</b>
-              </div>
-            </div>
-            <div className="check-out" onClick={checkoutHandler}>
-              check out
-            </div>
-          </div>
+      {isExploding && (
+        <div
+          className="confetti"
+          style={{
+            width: "1%",
+            height: "1%",
+            position: "absolute",
+            top: "0%",
+            left: "50%",
+          }}
+        >
+          <ConfettiExplosion
+            width={2500}
+            force={0.8}
+            duration={3000}
+            particleCount={350}
+          />
         </div>
-      </section>
-      {dialog ? <DialogAddress onDialog={Close} /> : null}
-    </>
-  ) : (
-    <>
-      <section className="empty-cart">
-        <h2>You cartlist is empty</h2>
-        <div className="shop-btn" onClick={() => (navigate("/"), scroll(0, 0))}>
-          shop now
-        </div>
-      </section>
+      )}
+      {initialFetch ? (
+        <>
+          <h2
+            style={{ textAlign: "center", height: "12rem", marginTop: "4rem" }}
+          >
+            Loading...
+          </h2>
+        </>
+      ) : cartProducts?.length > 0 ? (
+        <>
+          {/* <Confetti width={window.innerWidth-100 || 300	}/> */}
+          <section className="cart-page">
+            <div className="container">
+              <div className="card-list-container">
+                <p>You have {wishCount ? wishCount : 0} items in your cart</p>
+                <div className="cards-container">
+                  <div className="cards">
+                    {cartProducts.map((card, idx) => {
+                      const {
+                        featureImage,
+                        product_name,
+                        product_price,
+                        _sale,
+                        _id,
+                        quantity,
+                        category,
+                      } = card;
+
+                      const activePrice = _sale.onSale
+                        ? _sale.onSale.price * quantity
+                        : product_price * quantity;
+
+                      return (
+                        <CardMini
+                          key={idx}
+                          onClick={() => {
+                            navigate(`/shop/${_id}`), scroll(0, 0);
+                          }}
+                          productImageSrc={featureImage}
+                          productCategory={category}
+                          productName={product_name}
+                          price={activePrice}
+                          oldPrice={
+                            _sale.onSale ? product_price * quantity : null
+                          }
+                          removeItem={() => {
+                            removeItemHandler(_id, quantity);
+                          }}
+                          quantity={quantity}
+                          plusBtn={(e) => plusBtn(e, card)}
+                          minusBtn={(e) => minusBtn(e, card)}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+              <div className="card-details-container">
+                <h2>Payment Summary</h2>
+                <div className="pay-methods-container">
+                  <b>Pay With</b>
+                  <div className="methods">
+                    <label
+                      className="method-container"
+                      // onClick={() => toast.error("not yet available")}
+                    >
+                      <MdMobileFriendly />
+                      Insta Pay
+                      <input
+                        type="radio"
+                        name="paymethod"
+                        onChange={() => setIsChecked("insta")}
+                      />
+                      <span className="check-mark"></span>
+                    </label>
+                    <label className="method-container">
+                      {/* <IoCashOutline /> */}
+                      <BsCash />
+                      Cash On Deliver
+                      <input
+                        type="radio"
+                        name="paymethod"
+                        defaultChecked
+                        onChange={() => setIsChecked("cash")}
+                      />
+                      <span className="check-mark"></span>
+                    </label>
+                  </div>
+                </div>
+                <div className="pay-receipt-container">
+                  <div className="delivery-fee receipt-group">
+                    <p>Delivery Fee</p>
+                    <p>{deleviryFee}</p>
+                  </div>
+                  <div className="total receipt-group">
+                    <p>Total</p>
+                    <b>EGP {calculateTotalPrice()}</b>
+                  </div>
+                </div>
+                <div className="check-out" onClick={checkoutHandler}>
+                  check out
+                </div>
+              </div>
+            </div>
+          </section>
+          {dialog ? <DialogAddress onDialog={Close} /> : null}
+        </>
+      ) : (
+        <>
+          <section className="empty-cart">
+            <h2>You cartlist is empty</h2>
+            <div
+              className="shop-btn"
+              onClick={() => (navigate("/"), scroll(0, 0))}
+            >
+              shop now
+            </div>
+          </section>
+        </>
+      )}
     </>
   );
 };

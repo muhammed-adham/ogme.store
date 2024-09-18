@@ -25,17 +25,13 @@ const MetaPixel = () => {
     window.fbq('track', 'PageView');
 
     // Cleanup function to remove the script if needed
-    return () => {
-      document.body.removeChild(script);
-    };
+    // return () => {
+    //   document.body.removeChild(script);
+    // };
+
   }, []);
 
-  return (
-    <noscript>
-      <img height="1" width="1" style={{ display: 'none' }}
-           src="https://www.facebook.com/tr?id=3912110232409529&ev=PageView&noscript=1" />
-    </noscript>
-  );
+  return null
 };
 
 export default MetaPixel;

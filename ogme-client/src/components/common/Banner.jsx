@@ -6,10 +6,6 @@ import { Link, NavLink } from "react-router-dom";
  * This component represents a custom banner
  * It used to display either a video or an image and breadcrumb for sub-pages
  *
- * Usage:
- * - Shop Pages: This Banner is used in the Drive, Bottles, SunCatcher, Customize pages
- * - OnSale Page: This banner is used in the OnSale page to promote discounted or special offer items.
- *
  */
 const Banner = ({ src, currentPage, isLoading }) => {
   const [isVideo, setIsVideo] = useState();
@@ -29,7 +25,6 @@ const Banner = ({ src, currentPage, isLoading }) => {
   };
 
   useEffect(() => {
-    // Set initial attributes on mount
     if (videoRef.current) {
       videoRef.current.autoplay = true;
       videoRef.current.muted = true;
@@ -37,17 +32,18 @@ const Banner = ({ src, currentPage, isLoading }) => {
       videoRef.current.loop = true;
       videoRef.current.controls = false;
 
-      // Try to play the video on load
-      videoRef.current.addEventListener("canplaythrough", handlePlay);
+      const onCanPlayThrough = () => {
+        handlePlay();
+      };
+      
+      videoRef.current.addEventListener("canplaythrough", onCanPlayThrough);
+      
+      // Cleanup
+      return () => {
+        videoRef.current.removeEventListener("canplaythrough", onCanPlayThrough);
+      };
     }
-
-    // Cleanup on unmount
-    return () => {
-      if (videoRef.current) {
-        videoRef.current.removeEventListener("canplaythrough", handlePlay);
-      }
-    };
-  }, []);
+  }, [videoRef]);
 
   // useEffect(() => {
   //   const handleAutoplay = async () => {

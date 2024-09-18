@@ -54,21 +54,21 @@ const Drive = () => {
     }
   );
 
-  const pageHandler = () => {
-    setSkipState((i - 1) * limit), refetch(), scroll(0, 400);
-  };
+  // const pageHandler = () => {
+  //   setSkipState((i - 1) * limit), refetch(), scroll(0, 400);
+  // };
   const pagination = [];
   for (let i = 1; i <= Math.ceil(dataLengthState / limit); i++) {
     pagination.push(
       <NavLink
         className={`page-no ${
-          skipState / limit == i - 1 ? "active-page" : null
+          skipState / limit === i - 1 ? "active-page" : ""
         }`}
         key={i}
         onClick={async () => {
           setSkipState((i - 1) * limit),
             await refetch(),
-            scroll({
+            window.scroll({
               top: 0,
               left: 0,
               behavior: "smooth",

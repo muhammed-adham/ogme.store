@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { WishCountContext } from "../../context/WishCountContext";
 import { useQuery } from "react-query";
+import ConfettiExplosion from "react-confetti-explosion";
 
 /** === Ask Page ===
  *
@@ -16,6 +17,8 @@ import { useQuery } from "react-query";
  *
  */
 const InstaPay = () => {
+  const [isExploding, setIsExploding] = React.useState(false);
+
   //========================================================================================Handle input Data ForMobile
   //========================================================================================cartListCounterContext
   const { setWishCount, wishCount } = useContext(WishCountContext);
@@ -54,7 +57,7 @@ const InstaPay = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     const loadingToastId = toast.loading("Loading...");
-    
+
     // Handle the image upload and await the response
     const uploadResponse = await handleUpload();
 
@@ -70,19 +73,36 @@ const InstaPay = () => {
     if (!userName || !phone || !email || !uploadResponse) {
       toast.error("please provide valid information");
     } else {
+      setIsExploding(true);
+
+      // Track the checkout event with Meta Pixel
+      await fbq("track", "Purchase", {
+        content_type: cartProducts.map((el) => el.category),
+        content_ids: cartProducts.map((el) => el._id),
+        // Assuming each product has a price
+        total: cartProducts.reduce(
+          (total, el) => total + el.product_price * el.quantity,
+          0
+        ),
+        quantity: cartProducts.reduce((total, el) => total + el.quantity, 0), // Assuming each product has a quantity
+        method: "instapay",
+      });
+
       await askUsEmail(data);
       await cartProducts.map((el) => {
         const productWithPayment = {
           ...el,
-          payment: 'instaPay', // Add the payment key
+          payment: "instaPay", // Add the payment key
         };
         removeProductCart(el._id);
         postUserOrder(productWithPayment);
       });
       toast.success("your order has been processed"),
-      setCartProducts(null),
-      setWishCount(0),
-      navigate("/account/orders");
+        setCartProducts(null),
+        setWishCount(0),
+        setTimeout(() => {
+          navigate("/account/orders");
+        }, 2000); // Adjust the time as necessary
     }
     toast.dismiss(loadingToastId); // Dismiss the loading toast
   };
@@ -126,6 +146,25 @@ const InstaPay = () => {
   //=============================================================Return==============================================================//
   return (
     <>
+     {isExploding && (
+        <div
+          className="confetti"
+          style={{
+            width: "1%",
+            height: "1%",
+            position: "absolute",
+            top: "0%",
+            left: "50%",
+          }}
+        >
+          <ConfettiExplosion
+            width={2500}
+            force={0.8}
+            duration={3000}
+            particleCount={350}
+          />
+        </div>
+      )}
       <section className="ask-us">
         <div className="container">
           <div className="form-container">

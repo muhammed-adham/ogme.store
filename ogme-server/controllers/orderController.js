@@ -42,7 +42,7 @@ module.exports.add = async (req, res) => {
                 user: req.body.user,
                 product_id: req.body.product_id
             });
-            console.log(existingCartItem);
+            // console.log(existingCartItem);
             
 
             if (existingCartItem) {
