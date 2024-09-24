@@ -21,7 +21,7 @@ const MetaPixel = () => {
     document.body.appendChild(script);
 
     // Initialize Facebook Pixel
-    window.fbq('init', '3912110232409529');
+    window.fbq('init', '1060896135398879');
     window.fbq('track', 'PageView');
 
     // Cleanup function to remove the script if needed
