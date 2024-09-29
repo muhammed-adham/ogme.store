@@ -163,17 +163,20 @@ const AdminOrders = () => {
                     quantity,
                     state,
                     created_at: date,
-                    payment
+                    payment,
+                    clientName,
+                    mobile: orderMobile,
+                    address: orderAddress,
                   },
                   user: { fullName: userName, email, mobile, address },
                 } = data;
 
-                
                 if (
-                  mobile?.includes(termState) &&
-                  (ordersStatus == "all" ||
-                    state === ordersStatus ||
-                    ordersStatus == "")
+                  mobile ||
+                  (orderMobile?.includes(termState) &&
+                    (ordersStatus == "all" ||
+                      state === ordersStatus ||
+                      ordersStatus == ""))
                 ) {
                   return (
                     <tr key={idx}>
@@ -181,15 +184,15 @@ const AdminOrders = () => {
                       <td
                         style={{ wordBreak: "break-word", userSelect: "text" }}
                       >
-                        {userName.split(" ").slice(0, 2).join(" ")} <hr />
-                        {mobile}
+                        {userName||clientName.split(" ").slice(0, 2).join(" ")} <hr />
+                        {mobile||orderMobile}
                         <hr />
-                        {email}
+                        {email||'Guest'}
                         <hr />
-                        {address}
+                        {address||orderAddress}
                       </td>
                       <td>{prdName}</td>
-                      <td>{price*quantity}</td>
+                      <td>{price * quantity}</td>
                       <td>{payment}</td>
                       <td>{quantity}</td>
                       <td>{new Date(date).toDateString()}</td>

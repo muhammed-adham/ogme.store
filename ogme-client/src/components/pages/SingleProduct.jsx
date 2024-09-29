@@ -182,10 +182,10 @@ const SingleProduct = () => {
           setWishCount((prev) => prev + quantity),
             toast.success("added successfuly");
         } else {
-          toast("Please log in first.", {
-            icon: "⛔️",
-          });
-          navigate("/login");
+          // toast("Please log in first.", {
+          //   icon: "⛔️",
+          // });
+          navigate("/purchase", { state: { data: cartDataState } });
           scroll(0, 0);
         }
       });
@@ -205,10 +205,10 @@ const SingleProduct = () => {
             navigate("/cartlist"),
             scroll(0, 0);
         } else {
-          toast("Please log in first.", {
-            icon: "⛔️",
-          });
-          navigate("/login");
+          // toast("Please log in first.", {
+          //   icon: "⛔️",
+          // });
+          navigate("/purchase", { state: { data: cartDataState } });
           scroll(0, 0);
         }
       });

@@ -15,7 +15,7 @@ const {userAuth} = require('../lib/middleware');
 
 router.route("/")
     .get(userAuth, order.all)  // View all Products
-    .post(userAuth, order.add); // Add new Product
+    .post(order.add); // Add new Product
 
 router.route("/:id")
     .get(userAuth, order.state)

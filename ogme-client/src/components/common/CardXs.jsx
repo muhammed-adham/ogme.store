@@ -80,9 +80,7 @@ const CardXs = ({
           <p>{productName}</p>
           <div className="price">
             <span>
-              <del>
-                {oldPrice ? "EGP" : null} {oldPrice}
-              </del>
+              {oldPrice ? <del>EGP {oldPrice}</del> : null}
               EGP {price}
             </span>
           </div>

@@ -34,6 +34,7 @@ import ResetPassword from "./components/pages/ResetPassword";
 import InstaPay from "./components/pages/InstaPay";
 import MetaPixel from "./context/MetaPixel";
 import PNF from "./components/pages/PNF";
+import Purchase from "./components/pages/Purchase";
 
 const App = () => {
   //Google Auth
@@ -67,6 +68,7 @@ const App = () => {
         { path: "/register", element: <Register /> },
         { path: "/login", element: <Login /> },
         { path: "/cartlist", element: <Cart /> },
+        { path: "/purchase", element: <Purchase /> },
         {
           path: "/account",
           element: <Account />,

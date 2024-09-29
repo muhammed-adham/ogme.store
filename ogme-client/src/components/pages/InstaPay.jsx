@@ -78,7 +78,7 @@ const InstaPay = () => {
       // Track the checkout event with Meta Pixel
       await fbq("track", "Purchase", {
         content_type: cartProducts.map((el) => el.category),
-        content_ids: cartProducts.map((el) => el._id),
+        content_names: cartProducts.map((el) => el.product_name),
         // Assuming each product has a price
         total: cartProducts.reduce(
           (total, el) => total + el.product_price * el.quantity,
