@@ -34,6 +34,7 @@ const Admin = () => {
             Products
           </NavLink>
           <NavLink to={"orders"}>Orders</NavLink>
+          <NavLink to={"users"}>Users</NavLink>
         </div>
         {!isAdminPanelPage ? (
           <Outlet />

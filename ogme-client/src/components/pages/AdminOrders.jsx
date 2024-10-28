@@ -154,7 +154,7 @@ const AdminOrders = () => {
               </tr>
             </thead>
             <tbody>
-              {mergedData?.map((data, idx) => {
+              {mergedData?.slice().reverse().map((data, idx) => {
                 const {
                   order: {
                     _id,
@@ -172,7 +172,6 @@ const AdminOrders = () => {
                 } = data;
 
                 if (
-                  mobile ||
                   (orderMobile?.includes(termState) &&
                     (ordersStatus == "all" ||
                       state === ordersStatus ||

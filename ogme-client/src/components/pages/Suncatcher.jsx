@@ -113,8 +113,8 @@ const Suncatcher = () => {
                     prdID={prd._id}
                     key={idx}
                     productName={prd.name}
-                    price={prd._sale.onSale ? prd._sale.price : prd.price}
-                    oldPrice={prd._sale.onSale ? prd.price : null}
+                    price={prd._sale?.onSale ? prd._sale?.price : prd.price}
+                    oldPrice={prd._sale?.onSale ? prd.price : null}
                     productImage={prd.featureImage}
                     sold={prd.sold}
                     onClick={() => {
@@ -133,8 +133,8 @@ const Suncatcher = () => {
                     isDragging={false}
                     key={idx}
                     productName={prd.name}
-                    price={prd._sale.onSale ? prd._sale.price : prd.price}
-                    oldPrice={prd._sale.onSale ? prd.price : null}
+                    price={prd._sale?.onSale ? prd._sale?.price : prd.price}
+                    oldPrice={prd._sale?.onSale ? prd.price : null}
                     productImage={prd.featureImage}
                     sold={prd.sold}
                     onClick={() => {

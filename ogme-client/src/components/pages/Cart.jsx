@@ -44,9 +44,19 @@ const Cart = () => {
   const [userAddress, setUserAddress] = useState();
   const [initialFetch, setInitialFetch] = useState(true);
 
-  const { isLoading, isFetching } = useQuery("userProfile", GetUserProfile, {
+  const {
+    isLoading,
+    isFetching,
+    data: userProfile,
+  } = useQuery("userProfile", GetUserProfile, {
     onSuccess: (data) => {
       setCartProducts(data?.data?.cart?.response?.data);
+      // setCartProducts(
+      //   data?.data?.cart?.response?.data.map((item) => ({
+      //     ...item,
+      //     product_price: item._sale?.price || item.product_price,
+      //   }))
+      // );
       setUserAddress(data?.data?.data?.address);
       setInitialFetch(false);
     },
@@ -99,8 +109,8 @@ const Cart = () => {
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     cartProducts.forEach((card) => {
-      totalPrice += card._sale.onSale
-        ? _sale.onSale.price * card.quantity
+      totalPrice += card._sale?.onSale
+        ? card._sale?.price * card.quantity
         : card.product_price * card.quantity;
     });
     return totalPrice;
@@ -129,6 +139,8 @@ const Cart = () => {
       navigate("/instapay");
     } else {
       setIsExploding(true);
+      const toastLoading = toast.loading("processing..");
+
       // Track the checkout event with Meta Pixel
       await fbq("track", "Purchase", {
         content_type: cartProducts.map((el) => el.category),
@@ -139,13 +151,27 @@ const Cart = () => {
           0
         ),
         quantity: cartProducts.reduce((total, el) => total + el.quantity, 0), // Assuming each product has a quantity
-        method:'cash'
+        method: "cash",
       });
 
-      await cartProducts.map((el) => {
-        removeProductCart(el._id);
-        postUserOrder(el);
-      });
+      // await cartProducts.map((el) => {
+      //   removeProductCart(el._id);
+      //   postUserOrder(el).then(res=>console.log(res)
+      //   );
+      // });
+      const updatedCartProducts = await Promise.all(
+        cartProducts.map(async (el) => {
+          const updatedItem = {
+            ...el,
+            product_price: el._sale?.price || el.product_price,
+          };
+          await removeProductCart(el._id);
+          await postUserOrder(updatedItem);
+          return updatedItem;
+        })
+      );
+      toast.dismiss(toastLoading);
+
       toast.success("your order has been processed"),
         setCartProducts(null),
         setWishCount(0);
@@ -207,7 +233,7 @@ const Cart = () => {
                       } = card;
 
                       const activePrice = _sale.onSale
-                        ? _sale.onSale.price * quantity
+                        ? _sale.price * quantity
                         : product_price * quantity;
 
                       return (
@@ -221,7 +247,7 @@ const Cart = () => {
                           productName={product_name}
                           price={activePrice}
                           oldPrice={
-                            _sale.onSale ? product_price * quantity : null
+                            _sale?.onSale ? product_price * quantity : null
                           }
                           removeItem={() => {
                             removeItemHandler(_id, quantity);
@@ -284,6 +310,18 @@ const Cart = () => {
             </div>
           </section>
           {dialog ? <DialogAddress onDialog={Close} /> : null}
+        </>
+      ) : userProfile?.data?.data === undefined ? (
+        <>
+          <section className="empty-cart">
+            <h2>Create an account to save your cart</h2>
+            <div
+              className="shop-btn"
+              onClick={() => (navigate("/register"), scroll(0, 0))}
+            >
+              create account
+            </div>
+          </section>
         </>
       ) : (
         <>

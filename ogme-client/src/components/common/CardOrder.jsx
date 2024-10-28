@@ -45,11 +45,11 @@ const CardOrder = ({
     if (orderState==="delivered") {
       setProgress(100);
     } else if (orderState==="out") {
-      setProgress(75);
+      setProgress(66);
     } else if (orderState==="ready") {
-      setProgress(50);
+      setProgress(33);
     } else if (orderState==="Pending") {
-      setProgress(25);
+      setProgress(0);
     }
   };
 

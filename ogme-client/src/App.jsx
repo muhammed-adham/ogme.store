@@ -35,6 +35,7 @@ import InstaPay from "./components/pages/InstaPay";
 import MetaPixel from "./context/MetaPixel";
 import PNF from "./components/pages/PNF";
 import Purchase from "./components/pages/Purchase";
+import AdminUsers from "./components/pages/AdminUsers";
 
 const App = () => {
   //Google Auth
@@ -84,6 +85,7 @@ const App = () => {
             { path: "products", element: <AdminProducts /> },
             { path: "orders", element: <AdminOrders /> },
             { path: "banners", element: <AdminBanners /> },
+            { path: "users", element: <AdminUsers /> },
           ],
         },
       ],
@@ -92,7 +94,7 @@ const App = () => {
     { path: "/welcome/:id/:token", element: <WelcomeOnBoard /> },
     { path: "/reset-password/:id/:token", element: <ResetOnBoard /> },
     { path: "/reset-password", element: <ResetPassword /> },
-    { path: "*", element: <PNF /> }
+    { path: "*", element: <PNF /> },
   ]);
 
   return (

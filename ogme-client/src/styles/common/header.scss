@@ -30,6 +30,9 @@ header {
           &.active {
             opacity: 1 !important;
           }
+          &:hover{
+            opacity: 1;
+          }
         }
         span {
           display: flex;

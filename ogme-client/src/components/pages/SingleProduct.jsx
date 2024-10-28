@@ -21,8 +21,11 @@ import CardXs from "../common/CardXs";
 import { TabletContext } from "../../context/TabletContext";
 import { MobileContext } from "../../context/MobileContext";
 import DialogAddress from "../common/DialogAddress";
+import { LogedInContext } from "../../context/IsLogedIn";
 
 const SingleProduct = () => {
+  const { isLogedIn } = useContext(LogedInContext);
+
   //========================================================================================Variables
   const navigate = useNavigate();
   const { setWishCount } = useContext(WishCountContext);
@@ -123,8 +126,8 @@ const SingleProduct = () => {
         product_name: name,
         product_id: _id,
         product_price: price,
-        "_sale.onSale": _sale.onSale,
-        "_sale.price": _sale.price,
+        "_sale.onSale": _sale?.onSale,
+        "_sale.price": _sale?.price,
         quantity: quantity,
         featureImage: featureImage,
         category,
@@ -282,11 +285,15 @@ const SingleProduct = () => {
                 <h2>{productState?.name}</h2>
                 {productState?.price ? (
                   <div className="price">
-                    {productState?._sale?.onSale ? (
-                      <>
-                        <del>{`EGP ${productState?.price}`}</del>
-                        <b>{`EGP ${productState?._sale.price}`}</b>
-                      </>
+                    {isLogedIn ? (
+                      productState?._sale?.onSale ? (
+                        <>
+                          <del>{`EGP ${productState?.price}`}</del>
+                          <b>{`EGP ${productState?._sale?.price}`}</b>
+                        </>
+                      ) : (
+                        <b>{`EGP ${productState?.price}`}</b>
+                      )
                     ) : (
                       <b>{`EGP ${productState?.price}`}</b>
                     )}
@@ -377,7 +384,7 @@ const SingleProduct = () => {
                   } = product;
 
                   const discountedPrice =
-                    _sale.onSale == true ? _sale.onSale.price : price;
+                    _sale?.onSale == true ? _sale?.onSale.price : price;
 
                   const handleClick = () => {
                     setQuantity(1);
@@ -396,8 +403,20 @@ const SingleProduct = () => {
                       key={idx}
                       productImage={featureImage}
                       productName={name}
-                      price={_sale.onSale ? _sale.price : price}
-                      oldPrice={_sale.onSale ? price : null}
+                    price={
+                      isLogedIn
+                        ? _sale?.onSale
+                          ? _sale?.price
+                          : price
+                        : price
+                    }
+                    oldPrice={
+                      isLogedIn
+                        ? _sale?.onSale
+                          ? price
+                          : null
+                        : null
+                    }
                       sold={sold}
                       onClick={handleClick}
                     />
@@ -407,8 +426,20 @@ const SingleProduct = () => {
                       key={idx}
                       productImage={featureImage}
                       productName={name}
-                      price={_sale.onSale ? _sale.price : price}
-                      oldPrice={_sale.onSale ? price : null}
+                    price={
+                      isLogedIn
+                        ? _sale?.onSale
+                          ? _sale?.price
+                          : price
+                        : price
+                    }
+                    oldPrice={
+                      isLogedIn
+                        ? _sale?.onSale
+                          ? price
+                          : null
+                        : null
+                    }
                       sold={sold}
                       onClick={handleClick}
                     />

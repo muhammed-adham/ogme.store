@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Banner from "../common/Banner";
 import { useQuery } from "react-query";
-import { getAllProducts, getBanner } from "../../utils/axiosConfig";
+import {
+  getAllProducts,
+  getBanner,
+  GetUserProfile,
+} from "../../utils/axiosConfig";
 import Card from "../common/Card";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +15,12 @@ import { useNavigate } from "react-router-dom";
  *
  */
 const OnSale = () => {
+  const { data: userProfile, refetch } = useQuery(
+    "userProfile",
+    GetUserProfile,
+    []
+  );
+
   const [homeBanner, setHomeBanner] = useState();
 
   const { isLoading: bannerIsLoading, isFetching } = useQuery(
@@ -71,6 +81,16 @@ const OnSale = () => {
                     Loading...
                   </h2>
                 </>
+              ) : userProfile?.data?.data === undefined ? (
+                <section className="empty-cart" style={{ margin: "auto" }}>
+                  <h2 style={{textAlign:'center'}}>Create an account to access special offers and discounts </h2>
+                  <div
+                    className="shop-btn"
+                    onClick={() => (navigate("/register"), scroll(0, 0))}
+                  >
+                    create account
+                  </div>
+                </section>
               ) : onSaleProducts?.length > 0 ? (
                 onSaleProducts?.map((prd, idx) => {
                   return (
@@ -78,10 +98,15 @@ const OnSale = () => {
                       key={idx}
                       productName={prd.name}
                       productImage={prd.featureImage}
-                      price={prd._sale.onSale ? prd._sale.price : prd.price}
-                      oldPrice={prd._sale.onSale ? prd.price : null}
+                      price={prd._sale?.onSale ? prd._sale?.price : prd.price}
+                      oldPrice={prd._sale?.onSale ? prd.price : null}
                       onClick={() => {
-                        navigate(`/shop/${prd.category}/${prd._id}`),
+                        navigate(
+                          `/shop/${prd.category.split(" ")[1]}/${prd.name
+                            .split(" ")
+                            .join("-")}`,
+                          { state: { data: prd._id } }
+                        ),
                           scroll(0, 0);
                       }}
                     />

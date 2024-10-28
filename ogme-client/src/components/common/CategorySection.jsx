@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/scss";
 import { TabletContext } from "../../context/TabletContext";
 import { MobileContext } from "../../context/MobileContext";
+import { LogedInContext } from "../../context/IsLogedIn";
 
 /** === Category Section ===
  *
@@ -41,6 +42,8 @@ const CategorySection = ({
   const { isTablet } = useContext(TabletContext);
   const { isMobile } = useContext(MobileContext);
   const [isDragging, setIsDragging] = useState(false);
+  // const isLogedIn} = useContext(IslogedInProvider);
+  const { isLogedIn } = useContext(LogedInContext);
 
   //Data Length
   useEffect(() => {
@@ -140,13 +143,28 @@ const CategorySection = ({
                         isDragging={isDragging}
                         key={idx}
                         productName={prd.name}
-                        price={prd._sale.onSale ? prd._sale.price : prd.price}
-                        oldPrice={prd._sale.onSale ? prd.price : null}
+                        price={
+                          isLogedIn
+                            ? prd._sale?.onSale
+                              ? prd._sale?.price
+                              : prd.price
+                            : prd.price
+                        }
+                        oldPrice={
+                          isLogedIn
+                            ? prd._sale?.onSale
+                              ? prd.price
+                              : null
+                            : null
+                        }
                         productImage={prd.featureImage}
                         sold={prd.sold}
                         onClick={() => {
                           navigate(
-                            `/shop/${prd.category.split(" ")[1]}/${prd.name.split(' ').join('-')}`,{state:{data:prd._id}}
+                            `/shop/${prd.category.split(" ")[1]}/${prd.name
+                              .split(" ")
+                              .join("-")}`,
+                            { state: { data: prd._id } }
                           ),
                             scroll(0, 0);
                         }}

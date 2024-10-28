@@ -5,12 +5,22 @@ import { Outlet, useLocation } from "react-router-dom";
 import { TabletContext } from "../context/TabletContext";
 import HeaderMob from "./common/HeaderMob";
 import Menu from "./common/Menu";
+import Ad from "./common/Ad";
+import { useQuery } from "react-query";
+import { GetUserProfile } from "../utils/axiosConfig";
 
 /** === Layout ===
  *
  * This component represents the Single Page Application.
  */
 const Layout = () => {
+  const {
+    data: userProfile,
+    isLoading,
+    isSuccess,
+    refetch,
+  } = useQuery("userProfile", GetUserProfile, []);
+
   const { isTablet } = useContext(TabletContext);
 
   window.onbeforeunload = function () {
@@ -26,13 +36,15 @@ const Layout = () => {
   //=============================================================Return=================================================================//
   return (
     <>
+      {isLoading ? null : userProfile?.data?.data === undefined ? <Ad /> : null}
+      {/* <Ad /> */}
       {isTablet ? (
         <>
           <HeaderMob />
           <Menu />
         </>
       ) : (
-        <Header/>
+        <Header />
       )}
       <Outlet />
       {!isAdminPages && <Footer />}

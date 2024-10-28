@@ -37,8 +37,12 @@ module.exports.all = async (req, res) => {
 module.exports.add = async (req, res) => {
   let r = {};
   const body = req.body;
+
   try {
     if (req.user && req.body.user === req.user._id) {
+      // console.log(body);
+
+      // console.log('here');
       // Check if the product is already in the cart
       const existingCartItem = await Order.findOne({
         user: req.body.user,
@@ -47,6 +51,7 @@ module.exports.add = async (req, res) => {
       // console.log(existingCartItem);
 
       if (existingCartItem) {
+        // console.log('here');
         // If the product is already in the cart, update the quantity
         const updatedCartItem = await Cart.findByIdAndUpdate(
           existingCartItem._id,
@@ -59,6 +64,13 @@ module.exports.add = async (req, res) => {
           data: updatedCartItem,
         };
       }
+      const data = await _add(Order, body);
+      r = {
+        status: 200,
+        message: " Successfully Added",
+        data: data,
+      };
+      
     } else {
       const data = await _add(Order, body);
       r = {
@@ -68,6 +80,7 @@ module.exports.add = async (req, res) => {
       };
     }
   } catch (e) {
+    // console.log('here');
     r = {
       status: 401,
       message: e.message,

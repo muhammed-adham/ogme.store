@@ -86,6 +86,11 @@ export const deleteProductImages = async (id) => {
 
 //========================================================================================User
 //Register
+export const getAllUser = async () => {
+  return await request({ url: "/user"});
+};
+
+//Register
 export const postNewUser = async (userData) => {
   return await request({ url: "/user", method: "post", data: userData });
 };

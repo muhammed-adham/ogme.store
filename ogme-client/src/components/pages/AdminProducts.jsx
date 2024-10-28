@@ -204,8 +204,8 @@ const AdminProducts = () => {
         brief: target.brief,
         featureImage: target.featureImage,
         price: target.price,
-        onSale: target._sale.onSale,
-        salePrice: target._sale.price,
+        onSale: target._sale?.onSale,
+        salePrice: target._sale?.price,
         sold:target.sold,
 
         productImages: Array.from({ length: 9 }, (_, index) => ({

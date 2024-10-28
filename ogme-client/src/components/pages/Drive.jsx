@@ -6,6 +6,7 @@ import Card from "../common/Card";
 import { NavLink, useNavigate } from "react-router-dom";
 import { MobileContext } from "../../context/MobileContext";
 import CardXs from "../common/CardXs";
+import { LogedInContext } from "../../context/IsLogedIn";
 
 /** === Drive Category Page ===
  *
@@ -13,6 +14,8 @@ import CardXs from "../common/CardXs";
  *
  */
 const Drive = () => {
+  const { isLogedIn } = useContext(LogedInContext);
+
   const [homeBanner, setHomeBanner] = useState();
 
   const { isLoading, isFetching } = useQuery("getBanner", getBanner, {
@@ -103,8 +106,16 @@ const Drive = () => {
                     prdID={prd._id}
                     key={idx}
                     productName={prd.name}
-                    price={prd._sale.onSale ? prd._sale.price : prd.price}
-                    oldPrice={prd._sale.onSale ? prd.price : null}
+                    price={
+                      isLogedIn
+                        ? prd._sale?.onSale
+                          ? prd._sale?.price
+                          : prd.price
+                        : prd.price
+                    }
+                    oldPrice={
+                      isLogedIn ? (prd._sale?.onSale ? prd.price : null) : null
+                    }
                     productImage={prd.featureImage}
                     sold={prd.sold}
                     onClick={() => {
@@ -123,8 +134,16 @@ const Drive = () => {
                     isDragging={false}
                     key={idx}
                     productName={prd.name}
-                    price={prd._sale.onSale ? prd._sale.price : prd.price}
-                    oldPrice={prd._sale.onSale ? prd.price : null}
+                    price={
+                      isLogedIn
+                        ? prd._sale?.onSale
+                          ? prd._sale?.price
+                          : prd.price
+                        : prd.price
+                    }
+                    oldPrice={
+                      isLogedIn ? (prd._sale?.onSale ? prd.price : null) : null
+                    }
                     productImage={prd.featureImage}
                     sold={prd.sold}
                     onClick={() => {

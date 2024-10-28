@@ -6,6 +6,7 @@ import { getBanner, getCategoryProducts } from "../../utils/axiosConfig";
 import { NavLink, useNavigate } from "react-router-dom";
 import CardXs from "../common/CardXs";
 import { MobileContext } from "../../context/MobileContext";
+import { LogedInContext } from "../../context/IsLogedIn";
 
 /** === Glassware Category Page ===
  *
@@ -22,6 +23,8 @@ import { MobileContext } from "../../context/MobileContext";
  *
  */
 const Glassware = () => {
+  const { isLogedIn } = useContext(LogedInContext);
+
   const [homeBanner, setHomeBanner] = useState();
 
   const { isLoading, isFetching } = useQuery("getBanner", getBanner, {
@@ -112,8 +115,20 @@ const Glassware = () => {
                     prdID={prd._id}
                     key={idx}
                     productName={prd.name}
-                    price={prd._sale.onSale ? prd._sale.price : prd.price}
-                    oldPrice={prd._sale.onSale ? prd.price : null}
+                    price={
+                      isLogedIn
+                        ? prd._sale?.onSale
+                          ? prd._sale?.price
+                          : prd.price
+                        : prd.price
+                    }
+                    oldPrice={
+                      isLogedIn
+                        ? prd._sale?.onSale
+                          ? prd.price
+                          : null
+                        : null
+                    }
                     productImage={prd.featureImage}
                     sold={prd.sold}
                     onClick={() => {
@@ -132,8 +147,20 @@ const Glassware = () => {
                     isDragging={false}
                     key={idx}
                     productName={prd.name}
-                    price={prd._sale.onSale ? prd._sale.price : prd.price}
-                    oldPrice={prd._sale.onSale ? prd.price : null}
+                    price={
+                      isLogedIn
+                        ? prd._sale?.onSale
+                          ? prd._sale?.price
+                          : prd.price
+                        : prd.price
+                    }
+                    oldPrice={
+                      isLogedIn
+                        ? prd._sale?.onSale
+                          ? prd.price
+                          : null
+                        : null
+                    }
                     productImage={prd.featureImage}
                     sold={prd.sold}
                     onClick={() => {
