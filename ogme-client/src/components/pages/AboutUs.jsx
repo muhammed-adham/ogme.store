@@ -37,7 +37,7 @@ const AboutUs = () => {
           <div className="content">
             <h2>Meet the artist</h2>
             <div className="artist-pic">
-              <img src={artistBanner?.bannerURL} alt="artist picture" />
+              <img src={artistBanner?.bannerURL} alt="" />
             </div>
             {/* <p>Muhammed Atef</p> */}
             <div className="social-icons">

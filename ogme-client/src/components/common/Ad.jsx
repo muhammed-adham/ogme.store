@@ -28,7 +28,8 @@ const Ad = () => {
                   handleClose();
                 }}
               >
-                <input type="submit" value={"subscribe"} onClick={() => {}} />
+                <div className="submit-subscribe"> subscribe</div>
+                {/* <input type="submit" value={"subscribe"} /> */}
               </NavLink>
             </form>
             <hr style={{opacity:'.3'}}/>
