@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
-import { postUserOrder } from "../../utils/axiosConfig";
+import { askUsEmail, postUserOrder } from "../../utils/axiosConfig";
 import ConfettiExplosion from "react-confetti-explosion";
 
 const Purchase = () => {
@@ -38,6 +38,7 @@ const Purchase = () => {
     const clientName = document.getElementById("clientName");
     const mobile = document.getElementById("mobile");
     const address = document.getElementById("address");
+    const email = document.getElementById("email-sign");
     //========================================================================================if inputs Empty
     //========================================================================================Name
     if (clientName.value == 0) {
@@ -50,8 +51,18 @@ const Purchase = () => {
       toast.error("please enter your mobile number");
       mobile.classList.add("required");
     }
+    //========================================================================================email
+    else if(email.value==0){
+      toast.error("please enter your email");
+      email.classList.add("required");
+    }
+    else if (!/^[a-zA-Z0-9_\-\.]{3,}@(gmail|yahoo|hotmail|outlook|icloud)\.(com|net|org|edu|gov)$/.test(email.value)) {
+      toast.error("please enter valid email");
+      email.classList.add("required");
+    }
     //========================================================================================address
     else if (address.value == 0) {
+      console.log(  /^[a-zA-Z0-9_\-\.]{3,}@(gmail|yahoo|hotmail|outlook|icloud)\.(com|net|org|edu|gov)$/.test(email.value));
       toast.error("please enter your address");
       address.classList.add("required");
     }
@@ -74,11 +85,24 @@ const Purchase = () => {
 
         await postUserOrder(OrderData);
 
-      toast.success("your order has been processed"),
+
+        // await askUsEmail(OrderData).then(res=>console.log(res)
+        // )
+
+        await toast.promise(
+          askUsEmail(OrderData),
+          {
+            loading: "order is being processed..",
+            success: <b>check your inbox</b>,
+            error: <b>email is incorrect!</b>,
+          }
+        );
+
+        navigate("/");
+      // toast.success("your order has been processed"),
         // Delay navigation to allow confetti to show
-        setTimeout(() => {
-          navigate("/");
-        }, 2000); // Adjust the time as necessary
+        // setTimeout(() => {
+        // }, 2000); // Adjust the time as necessary
     }
   };
 
@@ -132,6 +156,15 @@ const Purchase = () => {
                   onChange={inputHandler}
                   onInput={inputHandler}
                   //   value={inputData.name}
+                />
+                <input
+                  name="email"
+                  id="email-sign"
+                  type="email"
+                  // required
+                  placeholder="Enter your email"
+                  onChange={inputHandler}
+                  onInput={inputHandler}
                 />
                 <input
                   name="address"

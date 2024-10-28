@@ -48,9 +48,10 @@ const AdminOrders = () => {
       }
       setMergedData(mergedArray);
     };
-
+    
     fetchData(); // Call fetchData immediately (optional, adjust based on use case)
   }, [ordersState]); // Re-run useEffect only when orders change
+
 
   //Enable Save Btn After changing Order State
   const orderStateHandler = (e) => {
@@ -171,19 +172,14 @@ const AdminOrders = () => {
                   user: { fullName: userName, email, mobile, address },
                 } = data;
 
-                if (
-                  (orderMobile?.includes(termState) &&
-                    (ordersStatus == "all" ||
-                      state === ordersStatus ||
-                      ordersStatus == ""))
-                ) {
+
                   return (
                     <tr key={idx}>
                       <td>{mergedData?.length - idx}</td>
                       <td
                         style={{ wordBreak: "break-word", userSelect: "text" }}
                       >
-                        {userName||clientName.split(" ").slice(0, 2).join(" ")} <hr />
+                        {userName||clientName?.split(" ").slice(0, 2).join(" ")} <hr />
                         {mobile||orderMobile}
                         <hr />
                         {email||'Guest'}
@@ -228,7 +224,6 @@ const AdminOrders = () => {
                       </td>
                     </tr>
                   );
-                }
               })}
             </tbody>
           </table>

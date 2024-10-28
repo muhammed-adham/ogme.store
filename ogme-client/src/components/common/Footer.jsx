@@ -47,7 +47,6 @@ const Footer = () => {
   };
 
   const submitMail = () => {
-    console.log('email');
     
     if (
       /^[a-zA-Z0-9_\-\.]{3,}@(gmail|yahoo|hotmail|outlook|icloud)\.(com|net|org|edu|gov)$/.test(
