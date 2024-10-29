@@ -35,12 +35,15 @@ const Banner = ({ src, currentPage, isLoading }) => {
       const onCanPlayThrough = () => {
         handlePlay();
       };
-      
+
       videoRef.current.addEventListener("canplaythrough", onCanPlayThrough);
-      
+
       // Cleanup
       return () => {
-        videoRef.current.removeEventListener("canplaythrough", onCanPlayThrough);
+        videoRef.current.removeEventListener(
+          "canplaythrough",
+          onCanPlayThrough
+        );
       };
     }
   }, [videoRef]);
@@ -85,6 +88,8 @@ const Banner = ({ src, currentPage, isLoading }) => {
           </>
         ) : isVideo ? (
           <video
+          rel="preload"
+            preload="metadata"
             src={src}
             autoPlay={true}
             muted={true}
